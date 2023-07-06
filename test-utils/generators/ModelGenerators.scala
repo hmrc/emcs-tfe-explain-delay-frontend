@@ -16,7 +16,15 @@
 
 package generators
 
+import models.DelayType
+import org.scalacheck.{Arbitrary, Gen}
+
 trait ModelGenerators {
+
+  implicit lazy val arbitraryDelayType: Arbitrary[DelayType] =
+    Arbitrary {
+      Gen.oneOf(DelayType.values.toSeq)
+    }
 
 
 }

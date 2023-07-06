@@ -29,4 +29,7 @@ trait ImplicitConversions {
   implicit def stringToText(string: String)(implicit messages: Messages): Text =
     Text(messages(string))
 
+  implicit def stringToKey(string: String)(implicit messages: Messages): Key =
+    Key(content = Text(messages(string)))
+
 }

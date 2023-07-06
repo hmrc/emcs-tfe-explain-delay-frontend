@@ -17,11 +17,16 @@
 package controllers
 
 import base.SpecBase
+import mocks.services.MockUserAnswersService
 import play.api.http.Status.OK
+import play.api.inject
 import play.api.test.Helpers.{defaultAwaitTimeout, route, running, status, writeableOf_AnyContentAsEmpty}
 import play.api.test.{FakeRequest, Helpers}
+import services.UserAnswersService
 
-class IndexControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class IndexControllerSpec extends SpecBase with MockUserAnswersService {
 
   "IndexController Controller" - {
 
@@ -29,7 +34,11 @@ class IndexControllerSpec extends SpecBase {
 
       "must return OK and the correct view for a GET" in {
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        MockUserAnswersService.set(emptyUserAnswers).returns(Future.successful(emptyUserAnswers))
+
+        val application = applicationBuilder(userAnswers = None).overrides(
+          inject.bind[UserAnswersService].toInstance(mockUserAnswersService)
+        ).build()
 
         running(application) {
           val request = FakeRequest(Helpers.GET, routes.IndexController.onPageLoad(testErn, testArc).url)

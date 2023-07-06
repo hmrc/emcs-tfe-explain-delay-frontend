@@ -16,11 +16,11 @@
 
 package base
 
-import controllers.action.{FakeAuthAction, FakeDataRetrievalAction, FakeMovementAction}
-import controllers.actions.{AuthAction, DataRetrievalAction, MovementAction}
+import controllers.action.{FakeAuthAction, FakeDataRetrievalAction, FakeMovementAction, FakeUserAllowListAction}
+import controllers.actions.{AuthAction, DataRetrievalAction, MovementAction, UserAllowListAction}
 import fixtures.{BaseFixtures, GetMovementResponseFixtures}
 import models.UserAnswers
-import models.requests.{DataRequest, MovementRequest, UserRequest}
+import models.requests.{DataRequest, MovementRequest, OptionalDataRequest, UserRequest}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -53,6 +53,9 @@ trait SpecBase
     cookies(of).get("PLAY_LANG").get.value
   }
 
+  def optionalDataRequest[A](request: Request[A], answers: Option[UserAnswers] = None): OptionalDataRequest[A] =
+    OptionalDataRequest(movementRequest(request), answers)
+
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .configure(
@@ -60,6 +63,7 @@ trait SpecBase
       )
       .overrides(
         bind[AuthAction].to[FakeAuthAction],
+        bind[UserAllowListAction].to[FakeUserAllowListAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
         bind[MovementAction].toInstance(new FakeMovementAction(getMovementResponseModel))
       )
