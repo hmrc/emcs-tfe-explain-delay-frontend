@@ -28,38 +28,38 @@
 
 @(form: Form[_], mode: Mode)(implicit request: DataRequest[_], messages: Messages)
 
-    @layout(pageTitle = title(form, messages("delayType.title"))) {
+@layout(pageTitle = title(form, messages("delayType.title"))) {
 
-        @formHelper(action = routes.DelayTypeController.onSubmit(request.ern, request.arc, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.DelayTypeController.onSubmit(request.ern, request.arc, mode), 'autoComplete -> "off") {
 
-            @if(form.errors.nonEmpty) {
-                @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value_0")))
-            }
-
-            @h1("delayType.heading", Some(messages("arc.subHeading", request.arc)), "govuk-heading-l")
-
-            @p(classes = "govuk-body") {
-                @messages("delayType.p1")
-            }
-
-            @p(classes = "govuk-body") {
-                @messages("delayType.p2")
-            }
-
-            @govukRadios(
-                RadiosViewModel(
-                    field = form("value"),
-                    legend = LegendViewModel(HtmlContent(messages("delayType.title"))).withCssClass("govuk-fieldset__legend--m"),
-                    items = DelayType.options
-                )
-            )
-
-            @govukButton(
-                ButtonViewModel(messages("site.continue"))
-            )
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value_0")))
         }
-    }
 
-    @{
-        //$COVERAGE-OFF$
+        @h1("delayType.heading", Some(messages("arc.subHeading", request.arc)), "govuk-heading-l")
+
+        @p(classes = "govuk-body") {
+            @messages("delayType.p1")
+        }
+
+        @p(classes = "govuk-body") {
+            @messages("delayType.p2")
+        }
+
+        @govukRadios(
+            RadiosViewModel(
+                field = form("value"),
+                legend = LegendViewModel(HtmlContent(messages("delayType.title"))).withCssClass("govuk-fieldset__legend--m"),
+                items = DelayType.options
+            )
+        )
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
     }
+}
+
+@{
+    //$COVERAGE-OFF$
+}

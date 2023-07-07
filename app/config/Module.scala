@@ -17,7 +17,7 @@
 package config
 
 import com.google.inject.AbstractModule
-import controllers.actions.{AuthAction, AuthActionImpl, DataRequiredAction, DataRequiredActionImpl, DataRetrievalAction, DataRetrievalActionImpl, MovementAction, MovementActionImpl, UserAllowListAction, UserAllowListActionImpl}
+import controllers.actions._
 
 class Module extends AbstractModule {
 
