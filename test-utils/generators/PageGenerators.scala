@@ -16,7 +16,13 @@
 
 package generators
 
+import org.scalacheck.Arbitrary
+import pages.DelayTypePage
+
 trait PageGenerators {
+
+  implicit lazy val arbitraryDelayTypePage: Arbitrary[DelayTypePage.type] =
+    Arbitrary(DelayTypePage)
 
 
 }

@@ -17,26 +17,62 @@
 package controllers
 
 import base.SpecBase
-import play.api.http.Status.OK
-import play.api.test.Helpers.{defaultAwaitTimeout, route, running, status, writeableOf_AnyContentAsEmpty}
-import play.api.test.{FakeRequest, Helpers}
+import mocks.services.MockUserAnswersService
+import models.DelayType.ReportOfReceipt
+import models.NormalMode
+import pages.DelayTypePage
+import play.api.http.Status.SEE_OTHER
+import play.api.inject.bind
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{GET, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty}
+import services.UserAnswersService
 
-class IndexControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class IndexControllerSpec extends SpecBase with MockUserAnswersService {
 
   "IndexController Controller" - {
 
     "when calling .onPageLoad()" - {
 
-      "must return OK and the correct view for a GET" in {
+      "when existing UserAnswers don't exist" - {
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        "must Initialise the UserAnswers and redirect to DelayType" in {
 
-        running(application) {
-          val request = FakeRequest(Helpers.GET, routes.IndexController.onPageLoad(testErn, testArc).url)
+          MockUserAnswersService.set(emptyUserAnswers).returns(Future.successful(emptyUserAnswers))
 
-          val result = route(application, request).value
+          val application = applicationBuilder(userAnswers = None).overrides(
+            bind[UserAnswersService].toInstance(mockUserAnswersService)
+          ).build()
 
-          status(result) mustBe OK
+          running(application) {
+            val request = FakeRequest(GET, routes.IndexController.onPageLoad(testErn, testArc).url)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result) mustBe Some(routes.DelayTypeController.onPageLoad(testErn, testArc, NormalMode).url)
+          }
+        }
+      }
+
+      "when existing UserAnswers exist" - {
+
+        "must redirect to the Delay Type Controller" in {
+
+          val userAnswers = emptyUserAnswers.set(DelayTypePage, ReportOfReceipt)
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+
+            val request = FakeRequest(GET, routes.IndexController.onPageLoad(testErn, testArc).url)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result) mustBe Some(routes.DelayTypeController.onPageLoad(testErn, testArc, NormalMode).url)
+          }
         }
       }
 
