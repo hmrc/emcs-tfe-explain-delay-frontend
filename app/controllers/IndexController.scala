@@ -17,11 +17,12 @@
 package controllers
 
 import controllers.actions.{AuthAction, DataRetrievalAction, MovementAction}
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.UserAnswersService
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.Logging
 import views.html.IndexPage
 
 import javax.inject.Inject
@@ -34,24 +35,23 @@ class IndexController @Inject()(override val messagesApi: MessagesApi,
                                 withMovement: MovementAction,
                                 getData: DataRetrievalAction,
                                 view: IndexPage
-                               ) extends BaseController {
+                               ) extends BaseController with Logging {
 
   def onPageLoad(ern: String, arc: String): Action[AnyContent] =
     (authAction(ern, arc) andThen withMovement.fromCache(arc) andThen getData).async { implicit request =>
       request.userAnswers match {
-        case _ => initialiseAndRedirect(UserAnswers(request.internalId, request.ern, request.arc))
+        case Some(answers) if answers.data.fields.nonEmpty =>
+          Future.successful(
+            Redirect(routes.DelayTypeController.onPageLoad(answers.ern, answers.arc, NormalMode))
+          )
+        case _ =>
+          initialiseAndRedirect(UserAnswers(request.internalId, request.ern, request.arc))
       }
-    }
-
-  def onSubmit(ern: String, arc: String): Action[AnyContent] =
-    (authAction(ern, arc) andThen withMovement.fromCache(arc) andThen getData).async { implicit request =>
-      initialiseAndRedirect(UserAnswers(request.internalId, request.ern, request.arc))
     }
 
   private def initialiseAndRedirect(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Result] =
     userAnswersService.set(answers).map { _ =>
-      Ok("change to goto the first page in the flow")
+      Redirect(routes.DelayTypeController.onPageLoad(answers.ern, answers.arc, NormalMode))
     }
-
 
 }

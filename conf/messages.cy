@@ -69,3 +69,17 @@ notOnPrivateBeta.notSignedUp.p1.preLink = You can choose to
 notOnPrivateBeta.notSignedUp.p1.link = take part in the EMCS private beta research
 notOnPrivateBeta.notSignedUp.p1.afterLink = if you are not already involved.
 notOnPrivateBeta.notSignedUp.p2 = To take part you must currently submit EMCS receipts using the HMRC platform.
+
+arc.subHeading = Explanation for delay to {0}
+
+error.browser.title.prefix = Error:
+
+delayType.title = What''s been delayed?
+delayType.heading = Tell HMRC about a delay to provide information about a movement
+delayType.p1 = This explanation for delay will be sent to HMRC only. It will not change the expected delivery time for any goods still in transit.
+delayType.p2 = If you are the consignee, you will still need to submit a report of receipt for this movement.
+delayType.reportOfReceipt = Submitting a report of receipt
+delayType.consigneeOrChangeOfDestination = Providing a consignee or change of destination for the movement
+delayType.checkYourAnswersLabel = What''s been delayed
+delayType.error.required = Select what''s been delayed
+delayType.change.hidden = DelayType

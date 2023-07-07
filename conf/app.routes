@@ -16,3 +16,8 @@ GET        /account/signed-out          controllers.auth.SignedOutController.onP
 GET        /account/timeout             controllers.TimeoutController.onPageLoad()
 
 GET        /:ern/:arc                   controllers.IndexController.onPageLoad(ern: String, arc: String)
+
+GET        /:ern/:arc/delay-type                        controllers.DelayTypeController.onPageLoad(ern: String, arc: String, mode: Mode = NormalMode)
+POST       /:ern/:arc/delay-type                        controllers.DelayTypeController.onSubmit(ern: String, arc: String, mode: Mode = NormalMode)
+GET        /:ern/:arc/delay-type/change                 controllers.DelayTypeController.onPageLoad(ern: String, arc: String, mode: Mode = CheckMode)
+POST       /:ern/:arc/delay-type/change                 controllers.DelayTypeController.onSubmit(ern: String, arc: String, mode: Mode = CheckMode)

@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{Mode, NormalMode, UserAnswers}
-import pages.Page
+import pages.{DelayTypePage, Page}
 import play.api.mvc.Call
 
 import javax.inject.Inject
@@ -26,6 +26,8 @@ import javax.inject.Inject
 class Navigator @Inject()() extends BaseNavigator {
 
   private val normalRoutes: Page => UserAnswers => Call = {
+    case DelayTypePage =>
+      (userAnswers: UserAnswers) => testOnly.controllers.routes.UnderConstructionController.onPageLoad()
     case _ =>
       (userAnswers: UserAnswers) => routes.IndexController.onPageLoad(userAnswers.ern, userAnswers.arc)
   }
