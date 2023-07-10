@@ -29,7 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserAnswersService
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
-import viewmodels.checkAnswers.{DelayDetailsSummary, DelayReasonSummary, DelayTypeSummary}
+import viewmodels.checkAnswers.{DelayReasonSummary, DelayTypeSummary}
 import views.html.CheckYourAnswersView
 
 import scala.concurrent.Future
