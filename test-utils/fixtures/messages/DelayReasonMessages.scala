@@ -33,6 +33,7 @@ object DelayReasonMessages {
     val radioWeather: String
     val radioStrikes: String
     val radioAccident: String
+    val requiredError: String
     val cyaLabel: String
     val cyaChangeHidden: String
   }
@@ -48,6 +49,7 @@ object DelayReasonMessages {
     override val radioWeather: String = "Bad weather conditions"
     override val radioStrikes: String = "Strike action"
     override val radioAccident: String = "An accident in transit"
+    override val requiredError: String = "Select reason for the delay"
     override val cyaLabel: String = "Reason for delay"
     override val cyaChangeHidden: String = "reason for delay"
   }
@@ -63,6 +65,7 @@ object DelayReasonMessages {
     override val radioWeather: String = "Bad weather conditions"
     override val radioStrikes: String = "Strike action"
     override val radioAccident: String = "An accident in transit"
+    override val requiredError: String = "Select reason for the delay"
     override val cyaLabel: String = "Reason for delay"
     override val cyaChangeHidden: String = "reason for delay"
   }

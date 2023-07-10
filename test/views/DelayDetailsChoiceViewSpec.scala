@@ -17,8 +17,8 @@
 package views
 
 import base.ViewSpecBase
-import fixtures.messages.DelayTypeMessages
-import forms.DelayTypeFormProvider
+import fixtures.messages.DelayDetailsChoiceMessages
+import forms.DelayDetailsChoiceFormProvider
 import models.NormalMode
 import models.requests.DataRequest
 import org.jsoup.Jsoup
@@ -26,20 +26,18 @@ import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import views.html.DelayTypeView
+import views.html.DelayDetailsChoiceView
 
-class DelayTypeViewSpec extends ViewSpecBase with ViewBehaviours {
+class DelayDetailsChoiceViewSpec extends ViewSpecBase with ViewBehaviours {
 
-  object Selectors extends BaseSelectors {
-    val delayTypeLegend = "main legend"
-  }
+  object Selectors extends BaseSelectors
 
-  lazy val form = app.injector.instanceOf[DelayTypeFormProvider].apply()
-  lazy val view = app.injector.instanceOf[DelayTypeView]
+  lazy val form = app.injector.instanceOf[DelayDetailsChoiceFormProvider].apply()
+  lazy val view = app.injector.instanceOf[DelayDetailsChoiceView]
 
   "DetailsSelectItemView" - {
 
-    Seq(DelayTypeMessages.English, DelayTypeMessages.Welsh).foreach { messagesForLanguage =>
+    Seq(DelayDetailsChoiceMessages.English, DelayDetailsChoiceMessages.Welsh).foreach { messagesForLanguage =>
 
       s"when being rendered in lang code of '${messagesForLanguage.lang.code}'" - {
 
@@ -50,12 +48,9 @@ class DelayTypeViewSpec extends ViewSpecBase with ViewBehaviours {
 
         behave like pageWithExpectedElementsAndMessages(Seq(
           Selectors.title -> messagesForLanguage.title,
-          Selectors.h1 -> messagesForLanguage.h1,
-          Selectors.p(1) -> messagesForLanguage.p1,
-          Selectors.p(2) -> messagesForLanguage.p2,
-          Selectors.delayTypeLegend -> messagesForLanguage.delayTypeLegend,
-          Selectors.radioButton(1) -> messagesForLanguage.radioOption1,
-          Selectors.radioButton(2) -> messagesForLanguage.radioOption2,
+          Selectors.h1 -> messagesForLanguage.heading,
+          Selectors.radioButton(1) -> messagesForLanguage.yes,
+          Selectors.radioButton(2) -> messagesForLanguage.no,
           Selectors.button -> messagesForLanguage.continue
         ))
       }
