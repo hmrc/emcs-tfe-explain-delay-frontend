@@ -76,12 +76,29 @@ class NavigatorSpec extends SpecBase {
 
         "when answer is 'No' (false)" - {
 
-          //TODO: In future story, update to redirect to the Check Answers page
-          "must go to UnderConstruction page" in {
+          "must go to CheckYouAnswers page" in {
             navigator.nextPage(DelayDetailsChoicePage, NormalMode, emptyUserAnswers.set(DelayDetailsChoicePage, false)) mustBe
-              testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+              routes.CheckYourAnswersController.onPageLoad(testErn, testArc)
           }
         }
+      }
+
+      "for the CheckYourAnswers page" - {
+
+        //TODO: In future story, update to redirect to the Confirmation page
+        "must go to UnderConstruction page" in {
+          navigator.nextPage(CheckYourAnswersPage, NormalMode, emptyUserAnswers) mustBe
+            testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+        }
+      }
+    }
+
+    "in Check mode" - {
+
+      "must go to the CheckYouAnswers page for any page" in {
+
+        navigator.nextPage(DelayTypePage, CheckMode, emptyUserAnswers) mustBe
+          routes.CheckYourAnswersController.onPageLoad(testErn, testArc)
       }
     }
   }

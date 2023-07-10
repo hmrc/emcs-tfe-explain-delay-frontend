@@ -126,3 +126,9 @@ journeyRecovery.p3.signOutLink = sign out
 delayDetailsChoice.title = Do you want to give any more information about the delay?
 delayDetailsChoice.heading = Do you want to give any more information about the delay?
 delayDetailsChoice.error.required = Select yes if you want to give more information about the delay
+
+checkYourAnswers.title = Check your answers
+checkYourAnswers.heading = Check your answers
+checkYourAnswers.h2 = Now submit your explanation for delay
+checkYourAnswers.p1 = By submitting this explanation for delay you are confirming that, to the best of your knowledge, the details you are providing are correct.
+checkYourAnswers.submit = Submit explanation for delay
