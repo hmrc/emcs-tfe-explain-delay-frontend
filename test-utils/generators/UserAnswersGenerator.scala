@@ -18,6 +18,7 @@ package generators
 
 import fixtures.BaseFixtures
 import models.UserAnswers
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
@@ -27,7 +28,8 @@ trait UserAnswersGenerator extends TryValues with BaseFixtures {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    Arbitrary.arbitrary[(DelayTypePage.type, JsValue)] ::
+    arbitrary[(DelayReasonPage.type, JsValue)] ::
+    arbitrary[(DelayTypePage.type, JsValue)] ::
     Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {

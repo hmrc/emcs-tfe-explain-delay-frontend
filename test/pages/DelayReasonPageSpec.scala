@@ -16,17 +16,17 @@
 
 package pages
 
-import models.DelayType
+import models.DelayReason
 import pages.behaviour.PageBehaviours
 
-class DelayTypePageSpec extends PageBehaviours {
+class DelayReasonPageSpec extends PageBehaviours {
 
-  "DelayTypePage" - {
+  "DelayReasonPage" - {
 
-    beRetrievable[DelayType](DelayTypePage)
+    beRetrievable[DelayReason](DelayReasonPage)
 
-    beSettable[DelayType](DelayTypePage)
+    beSettable[DelayReason](DelayReasonPage)
 
-    beRemovable[DelayType](DelayTypePage)
+    beRemovable[DelayReason](DelayReasonPage)
   }
 }

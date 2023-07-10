@@ -16,18 +16,27 @@
 
 package generators
 
-import models.DelayType
+import models.{DelayReason, DelayType}
 import org.scalacheck.Arbitrary
-import pages.DelayTypePage
+import org.scalacheck.Arbitrary.arbitrary
+import pages.{DelayReasonPage, DelayTypePage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
+  implicit lazy val arbitraryDelayReasonUserAnswersEntry: Arbitrary[(DelayReasonPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[DelayReasonPage.type]
+        value <- arbitrary[DelayReason].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryDelayTypeUserAnswersEntry: Arbitrary[(DelayTypePage.type, JsValue)] =
     Arbitrary {
       for {
-        page  <- Arbitrary.arbitrary[DelayTypePage.type]
-        value <- Arbitrary.arbitrary[DelayType].map(Json.toJson(_))
+        page  <- arbitrary[DelayTypePage.type]
+        value <- arbitrary[DelayType].map(Json.toJson(_))
       } yield (page, value)
     }
 }

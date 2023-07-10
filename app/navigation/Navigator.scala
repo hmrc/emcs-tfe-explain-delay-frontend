@@ -17,8 +17,9 @@
 package navigation
 
 import controllers.routes
+import models.DelayReason.Other
 import models.{Mode, NormalMode, UserAnswers}
-import pages.{DelayTypePage, Page}
+import pages.{DelayReasonPage, DelayTypePage, Page}
 import play.api.mvc.Call
 
 import javax.inject.Inject
@@ -27,7 +28,16 @@ class Navigator @Inject()() extends BaseNavigator {
 
   private val normalRoutes: Page => UserAnswers => Call = {
     case DelayTypePage =>
-      (userAnswers: UserAnswers) => testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+      (userAnswers: UserAnswers) => routes.DelayReasonController.onPageLoad(userAnswers.ern, userAnswers.arc, NormalMode)
+    case DelayReasonPage => (userAnswers: UserAnswers) =>
+      userAnswers.get(DelayReasonPage) match {
+        case Some(Other) =>
+          //TODO: Redirect to the More Information page as part of future story
+          testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+        case _ =>
+          //TODO: Redirect to Choose to Provide More Information page as part of future story
+          testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+      }
     case _ =>
       (userAnswers: UserAnswers) => routes.IndexController.onPageLoad(userAnswers.ern, userAnswers.arc)
   }

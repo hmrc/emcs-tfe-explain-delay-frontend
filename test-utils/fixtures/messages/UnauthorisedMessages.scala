@@ -32,7 +32,7 @@ object UnauthorisedMessages {
 
   object English extends ViewMessages with BaseEnglish {
     override val heading = "There is a problem"
-    override val title = title("There is a problem")
+    override val title = titleHelper("There is a problem")
     override val p1 = "You do not have permission to view this page."
     override val p2 = "You should:"
     override val bullet1 = "check you have signed in with the right details"
@@ -42,7 +42,7 @@ object UnauthorisedMessages {
 
   object Welsh extends ViewMessages with BaseWelsh {
     override val heading = "There is a problem"
-    override val title = title("There is a problem")
+    override val title = titleHelper("There is a problem")
     override val p1 = "You do not have permission to view this page."
     override val p2 = "You should:"
     override val bullet1 = "check you have signed in with the right details"

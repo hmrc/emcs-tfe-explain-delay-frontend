@@ -27,11 +27,11 @@ object IndexMessages {
 
   object English extends ViewMessages with BaseEnglish {
     override val heading = "Excise Movement and Control System - GOV.UK"
-    override val title = title("emcs-tfe-explain-delay-frontend")
+    override val title = titleHelper("emcs-tfe-explain-delay-frontend")
   }
 
   object Welsh extends ViewMessages with BaseWelsh {
     override val heading = "Excise Movement and Control System - GOV.UK"
-    override val title = title("emcs-tfe-explain-delay-frontend")
+    override val title = titleHelper("emcs-tfe-explain-delay-frontend")
   }
 }

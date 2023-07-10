@@ -1,23 +1,30 @@
 # microservice specific routes
 
-->         /hmrc-frontend               hmrcfrontend.Routes
+->         /hmrc-frontend                               hmrcfrontend.Routes
 
-->         /error                       error.Routes
+->         /error                                       error.Routes
 
-GET        /refresh-session             controllers.KeepAliveController.keepAlive()
+GET        /refresh-session                             controllers.KeepAliveController.keepAlive()
 
-GET        /language/:lang              controllers.LanguageSwitchController.switchToLanguage(lang: String)
+GET        /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET        /assets/*file                controllers.Assets.versioned(path = "/public", file: Asset)
+GET        /assets/*file                                controllers.Assets.versioned(path = "/public", file: Asset)
 
-GET        /account/sign-out-survey     controllers.auth.AuthController.signOut()
-GET        /account/sign-out            controllers.auth.AuthController.signOutNoSurvey()
-GET        /account/signed-out          controllers.auth.SignedOutController.onPageLoad()
-GET        /account/timeout             controllers.TimeoutController.onPageLoad()
+GET        /account/sign-out-survey                     controllers.auth.AuthController.signOut()
+GET        /account/sign-out                            controllers.auth.AuthController.signOutNoSurvey()
+GET        /account/signed-out                          controllers.auth.SignedOutController.onPageLoad()
+GET        /account/timeout                             controllers.TimeoutController.onPageLoad()
 
-GET        /:ern/:arc                   controllers.IndexController.onPageLoad(ern: String, arc: String)
+GET        /:ern/:arc                                   controllers.IndexController.onPageLoad(ern: String, arc: String)
+
+GET        /:ern/:arc/no-information-delay              controllers.JourneyRecoveryController.onPageLoad(ern: String, arc: String)
 
 GET        /:ern/:arc/delay-type                        controllers.DelayTypeController.onPageLoad(ern: String, arc: String, mode: Mode = NormalMode)
 POST       /:ern/:arc/delay-type                        controllers.DelayTypeController.onSubmit(ern: String, arc: String, mode: Mode = NormalMode)
 GET        /:ern/:arc/delay-type/change                 controllers.DelayTypeController.onPageLoad(ern: String, arc: String, mode: Mode = CheckMode)
 POST       /:ern/:arc/delay-type/change                 controllers.DelayTypeController.onSubmit(ern: String, arc: String, mode: Mode = CheckMode)
+
+GET        /:ern/:arc/delay-reason                      controllers.DelayReasonController.onPageLoad(ern: String, arc: String, mode: Mode = NormalMode)
+POST       /:ern/:arc/delay-reason                      controllers.DelayReasonController.onSubmit(ern: String, arc: String, mode: Mode = NormalMode)
+GET        /:ern/:arc/delay-reason/change               controllers.DelayReasonController.onPageLoad(ern: String, arc: String, mode: Mode = CheckMode)
+POST       /:ern/:arc/delay-reason/change               controllers.DelayReasonController.onSubmit(ern: String, arc: String, mode: Mode = CheckMode)
