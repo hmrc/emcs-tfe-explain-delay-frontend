@@ -21,11 +21,8 @@ import models.{ConfirmationDetails, NormalMode}
 import navigation.Navigator
 import pages.CheckYourAnswersPage
 import play.api.i18n.MessagesApi
-import play.api.libs.json.Format.GenericFormat
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserAnswersService
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
-import viewmodels.checkAnswers.{DelayDetailsSummary, DelayReasonSummary, DelayTypeSummary}
 import views.html.CheckYourAnswersView
 
 import javax.inject.Inject
@@ -40,24 +37,13 @@ class CheckYourAnswersController @Inject()(
                                             override val getData: DataRetrievalAction,
                                             override val requireData: DataRequiredAction,
                                             override val userAllowList: UserAllowListAction,
-                                            val delayDetailsSummary: DelayDetailsSummary,
                                             val controllerComponents: MessagesControllerComponents,
                                             view: CheckYourAnswersView
                                           ) extends BaseNavigationController with AuthActionHelper {
 
   def onPageLoad(ern: String, arc: String): Action[AnyContent] =
     authorisedDataRequestWithCachedMovementAsync(ern, arc) { implicit request =>
-
-      Future.successful(Ok(view(
-        SummaryList(
-          Seq(
-            DelayTypeSummary.row(request.userAnswers),
-            DelayReasonSummary.row(request.userAnswers),
-            Some(delayDetailsSummary.row(request.userAnswers))
-          ).flatten
-        ),
-        routes.CheckYourAnswersController.onSubmit(ern, arc)
-      )))
+      Future.successful(Ok(view(routes.CheckYourAnswersController.onSubmit(ern, arc))))
     }
 
   def onSubmit(ern: String, arc: String): Action[AnyContent] =

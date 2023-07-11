@@ -1,0 +1,92 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.requests.DataRequest
+@import viewmodels.checkAnswers.CheckAnswersHelper
+@import config.AppConfig
+
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton,
+        checkAnswersHelper: CheckAnswersHelper,
+        govukSummaryList: GovukSummaryList,
+        confirmationPanel: components.confirmationPanel,
+        h2: components.h2,
+        p: components.p,
+        strong: components.strong,
+        link: components.link,
+        appConfig: AppConfig
+)
+
+@(confirmationDetails: ConfirmationDetails)(implicit request: DataRequest[_], messages: Messages)
+
+@layout(pageTitle = titleNoForm(messages("confirmation.title"))) {
+
+    @confirmationPanel("confirmation.heading")
+
+    @h2("confirmation.delayInformation.h2")
+
+    @govukSummaryList(checkAnswersHelper.summaryList(showActionLinks = false)(request.userAnswers, messages))
+
+    @p() {
+        @messages("confirmation.reference")
+        @strong {
+            @{confirmationDetails.reference}
+        }
+    }
+
+    @p(classes = "govuk-body no-print") {
+        @link(
+            link = "javascript:if(window.print)window.print()",
+            messageKey = "confirmation.print.link",
+            id = Some("print-page")
+        )
+        @messages("confirmation.print.afterLink")
+    }
+
+    @h2("confirmation.whatNext.h2")
+    @p() {
+        @messages("confirmation.whatNext.p1")
+    }
+
+    @h2("confirmation.mayNeedToDo.h2")
+    @p() {
+        @messages("confirmation.mayNeedToDo.p1")
+    }
+    @p() {
+        @messages("confirmation.mayNeedToDo.p2")
+    }
+
+    @govukButton(
+        ButtonViewModel("confirmation.button")
+                .withCssClass("govuk-!-margin-top-4 no-print")
+                .asLink(appConfig.emcsTfeHomeUrl(Some(request.ern)))
+    )
+
+    @p(classes = "govuk-body no-print") {
+        @link(
+            appConfig.feedbackFrontendSurveyUrl,
+            messageKey = "confirmation.feedback.link",
+            opensInNewTab = true,
+            id = Some("feedbackSurvey")
+        )
+        @messages("confirmation.feedback.time")
+    }
+}
+
+@{
+    //$COVERAGE-OFF$
+}

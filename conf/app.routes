@@ -41,3 +41,5 @@ POST       /:ern/:arc/delay-details/change              controllers.DelayDetails
 
 GET        /:ern/:arc/check-answers-delay               controllers.CheckYourAnswersController.onPageLoad(ern: String, arc: String)
 POST       /:ern/:arc/check-answers-delay               controllers.CheckYourAnswersController.onSubmit(ern: String, arc: String)
+
+GET        /:ern/:arc/confirmation                      controllers.ConfirmationController.onPageLoad(ern: String, arc: String)

@@ -17,11 +17,10 @@
 package viewmodels.checkAnswers
 
 import base.SpecBase
-import fixtures.messages.{DelayDetailsMessages, DelayReasonMessages}
+import fixtures.messages.DelayDetailsMessages
 import models.CheckMode
-import models.DelayReason.Strikes
 import org.scalatest.matchers.must.Matchers
-import pages.{DelayDetailsPage, DelayReasonPage}
+import pages.DelayDetailsPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Value
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -46,37 +45,64 @@ class DelayDetailsSummarySpec extends SpecBase with Matchers {
 
         "when there's no answer" - {
 
-          "must output the expected data" in {
+          "when showAction links is true" - {
 
-            delayDetailsSummary.row(emptyUserAnswers) mustBe
-              SummaryListRowViewModel(
-                key = messagesForLanguage.cyaLabel,
-                value = ValueViewModel(HtmlContent(
-                  link(
-                    controllers.routes.DelayDetailsController.onPageLoad(testErn, testArc, CheckMode).url,
-                    messagesForLanguage.noDelayInformationValue
-                  )
+            "must output the expected data" in {
+
+              delayDetailsSummary.row(showActionLinks = true)(emptyUserAnswers, msgs) mustBe
+                Some(SummaryListRowViewModel(
+                  key = messagesForLanguage.cyaLabel,
+                  value = ValueViewModel(HtmlContent(
+                    link(
+                      controllers.routes.DelayDetailsController.onPageLoad(testErn, testArc, CheckMode).url,
+                      messagesForLanguage.noDelayInformationValue
+                    )
+                  ))
                 ))
-              )
+            }
+          }
+
+          "when showAction links is false" - {
+
+            "must return None" in {
+
+              delayDetailsSummary.row(showActionLinks = false)(emptyUserAnswers, msgs) mustBe None
+            }
           }
         }
 
         "when there's an answer" - {
 
-          "must output the expected row" in {
+          "when showActionLinks is true" - {
 
-            delayDetailsSummary.row(emptyUserAnswers.set(DelayDetailsPage, Some("some details"))) mustBe
-              SummaryListRowViewModel(
-                key = messagesForLanguage.cyaLabel,
-                value = Value(HtmlContent("some details")),
-                actions = Seq(
-                  ActionItemViewModel(
-                    content = messagesForLanguage.change,
-                    href = controllers.routes.DelayDetailsController.onPageLoad(testErn, testArc, CheckMode).url,
-                    id = DelayDetailsPage
-                  ).withVisuallyHiddenText(messagesForLanguage.cyaChangeHidden)
-                )
-            )
+            "must output the expected row" in {
+
+              delayDetailsSummary.row(showActionLinks = true)(emptyUserAnswers.set(DelayDetailsPage, Some("some details")), msgs) mustBe
+                Some(SummaryListRowViewModel(
+                  key = messagesForLanguage.cyaLabel,
+                  value = Value(HtmlContent("some details")),
+                  actions = Seq(
+                    ActionItemViewModel(
+                      content = messagesForLanguage.change,
+                      href = controllers.routes.DelayDetailsController.onPageLoad(testErn, testArc, CheckMode).url,
+                      id = DelayDetailsPage
+                    ).withVisuallyHiddenText(messagesForLanguage.cyaChangeHidden)
+                  )
+                ))
+            }
+          }
+
+          "when showActionLinks is false" - {
+
+            "must output the expected row without change links" in {
+
+              delayDetailsSummary.row(showActionLinks = false)(emptyUserAnswers.set(DelayDetailsPage, Some("some details")), msgs) mustBe
+                Some(SummaryListRowViewModel(
+                  key = messagesForLanguage.cyaLabel,
+                  value = Value(HtmlContent("some details")),
+                  actions = Seq()
+                ))
+            }
           }
         }
       }

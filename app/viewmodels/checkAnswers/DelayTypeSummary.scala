@@ -28,7 +28,7 @@ import viewmodels.implicits._
 
 object DelayTypeSummary  {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+  def row(showActionLinks: Boolean)(implicit answers: UserAnswers, messages: Messages): Option[SummaryListRow] =
     answers.get(DelayTypePage).map {
       answer =>
 
@@ -41,7 +41,7 @@ object DelayTypeSummary  {
         SummaryListRowViewModel(
           key     = "delayType.checkYourAnswersLabel",
           value   = value,
-          actions = Seq(
+          actions = if(!showActionLinks) Seq() else Seq(
             ActionItemViewModel("site.change", routes.DelayTypeController.onPageLoad(answers.ern, answers.arc, CheckMode).url, DelayTypePage)
               .withVisuallyHiddenText(messages("delayType.change.hidden"))
           )

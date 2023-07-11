@@ -31,34 +31,35 @@ import javax.inject.Inject
 
 
 class DelayDetailsSummary @Inject()(link: link) {
-  def row(answers: UserAnswers)(implicit messages: Messages): SummaryListRow = {
+  def row(showActionLinks: Boolean)(implicit answers: UserAnswers, messages: Messages): Option[SummaryListRow] = {
 
     answers.get(DelayDetailsPage).flatten match {
 
       case Some(answer) =>
-        SummaryListRowViewModel(
+        Some(SummaryListRowViewModel(
           key = "delayDetails.checkYourAnswersLabel",
           value = ValueViewModel(HtmlContent(
             HtmlFormat.escape(answer)
           )),
-          actions = Seq(
+          actions = if(!showActionLinks) Seq() else Seq(
             ActionItemViewModel(
               content = "site.change",
               href = routes.DelayDetailsController.onPageLoad(answers.ern, answers.arc, CheckMode).url,
               id = DelayDetailsPage
             ).withVisuallyHiddenText(messages("delayDetails.change.hidden"))
           )
-        )
-
-      case _ => SummaryListRowViewModel(
-        key = "delayDetails.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlContent(
-          link(
-            routes.DelayDetailsController.onPageLoad(answers.ern, answers.arc, CheckMode).url,
-            "delayDetails.checkYourAnswers.noDelayInformationValue"
-          )
         ))
-      )
+      case _ if showActionLinks =>
+        Some(SummaryListRowViewModel(
+          key = "delayDetails.checkYourAnswersLabel",
+          value = ValueViewModel(HtmlContent(
+            link(
+              routes.DelayDetailsController.onPageLoad(answers.ern, answers.arc, CheckMode).url,
+              "delayDetails.checkYourAnswers.noDelayInformationValue"
+            )
+          ))
+        ))
+      case _ => None
     }
   }
 }
