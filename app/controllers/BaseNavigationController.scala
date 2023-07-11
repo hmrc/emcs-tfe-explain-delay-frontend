@@ -20,7 +20,7 @@ import models.requests.DataRequest
 import models.{Mode, UserAnswers}
 import navigation.BaseNavigator
 import pages.QuestionPage
-import play.api.libs.json.Format
+import play.api.libs.json.{Format, Reads}
 import play.api.mvc.Result
 import services.UserAnswersService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,6 +32,14 @@ trait BaseNavigationController extends BaseController with Logging {
 
   val userAnswersService: UserAnswersService
   val navigator: BaseNavigator
+
+  def withAnswer[A](page: QuestionPage[A])(f: A => Future[Result])(implicit request: DataRequest[_], reads: Reads[A]): Future[Result] =
+    request.userAnswers.get(page) match {
+      case Some(value) => f(value)
+      case None =>
+        logger.warn(s"Failed to retrieve expected answer for page: $page on uri: ${request.uri}")
+        Future.successful(Redirect(routes.JourneyRecoveryController.onPageLoad(request.ern, request.arc)))
+    }
 
   def saveAndRedirect[A](page: QuestionPage[A], answer: A, currentAnswers: UserAnswers, mode: Mode)
                         (implicit hc: HeaderCarrier, format: Format[A]): Future[Result] =

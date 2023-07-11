@@ -34,7 +34,7 @@ object NotOnPrivateBetaMessages {
 
   object English extends ViewMessages with BaseEnglish {
     override val heading = "There is a problem"
-    override val title = title("There is a problem")
+    override val title = titleHelper("There is a problem")
     override val p1 = "You do not have permission to view this page."
     override val alreadySignedUpH2 = "If you have signed up for the Excise Movement and Control System (EMCS) private beta research"
     override val alreadySignedUpP1 = "If you typed the web address, check it is correct. If you pasted the web address, check you copied the entire address."
@@ -46,7 +46,7 @@ object NotOnPrivateBetaMessages {
 
   object Welsh extends ViewMessages with BaseWelsh {
     override val heading = "There is a problem"
-    override val title = title("There is a problem")
+    override val title = titleHelper("There is a problem")
     override val p1 = "You do not have permission to view this page."
     override val alreadySignedUpH2 = "If you have signed up for the Excise Movement and Control System (EMCS) private beta research"
     override val alreadySignedUpP1 = "If you typed the web address, check it is correct. If you pasted the web address, check you copied the entire address."

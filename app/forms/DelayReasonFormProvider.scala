@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.DelayType
-import pages.behaviour.PageBehaviours
+import javax.inject.Inject
 
-class DelayTypePageSpec extends PageBehaviours {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.DelayReason
 
-  "DelayTypePage" - {
+class DelayReasonFormProvider @Inject() extends Mappings {
 
-    beRetrievable[DelayType](DelayTypePage)
-
-    beSettable[DelayType](DelayTypePage)
-
-    beRemovable[DelayType](DelayTypePage)
-  }
+  def apply(): Form[DelayReason] =
+    Form(
+      "value" -> enumerable[DelayReason]("delayReason.error.required")
+    )
 }

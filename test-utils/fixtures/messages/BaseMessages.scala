@@ -21,7 +21,7 @@ import play.api.i18n.Lang
 
 
 sealed trait BaseMessages { _: i18n =>
-  def title(heading: String): String
+  def titleHelper(heading: String): String
   val opensInNewTab: String
   def arcSubheading(arc: String): String
   val lang: Lang
@@ -38,7 +38,7 @@ sealed trait BaseMessages { _: i18n =>
 }
 
 trait BaseEnglish extends BaseMessages with EN {
-  override def title(heading: String) = s"$heading - Excise Movement and Control System - GOV.UK"
+  override def titleHelper(heading: String) = s"$heading - Excise Movement and Control System - GOV.UK"
   override val opensInNewTab: String = "(opens in new tab)"
   override def arcSubheading(arc: String): String = s"Report of receipt for $arc"
   override val continue = "Continue"
@@ -55,7 +55,7 @@ trait BaseEnglish extends BaseMessages with EN {
 object BaseEnglish extends BaseEnglish
 
 trait BaseWelsh extends BaseMessages with CY {
-  override def title(heading: String) = s"$heading - Excise Movement and Control System - GOV.UK"
+  override def titleHelper(heading: String) = s"$heading - Excise Movement and Control System - GOV.UK"
   override val opensInNewTab: String = "(opens in new tab)"
   override def arcSubheading(arc: String): String = s"Report of receipt for $arc"
   override val continue = "Continue"

@@ -53,7 +53,7 @@ class DelayTypeViewSpec extends ViewSpecBase with ViewBehaviours {
           Selectors.h1 -> messagesForLanguage.h1,
           Selectors.p(1) -> messagesForLanguage.p1,
           Selectors.p(2) -> messagesForLanguage.p2,
-          Selectors.delayTypeLegend -> "",
+          Selectors.delayTypeLegend -> messagesForLanguage.delayTypeLegend,
           Selectors.radioButton(1) -> messagesForLanguage.radioOption1,
           Selectors.radioButton(2) -> messagesForLanguage.radioOption2,
           Selectors.button -> messagesForLanguage.continue

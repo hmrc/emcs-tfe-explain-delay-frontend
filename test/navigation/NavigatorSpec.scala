@@ -18,6 +18,7 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
+import models.DelayReason.{Other, Strikes}
 import models._
 import pages._
 
@@ -40,11 +41,30 @@ class NavigatorSpec extends SpecBase {
 
         "must go to UnderConstruction page" in {
           navigator.nextPage(DelayTypePage, NormalMode, emptyUserAnswers) mustBe
-            testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+            routes.DelayReasonController.onPageLoad(testErn, testArc, NormalMode)
         }
-
       }
 
+      "for the DelayReason page" - {
+
+        "when reason is `Other`" - {
+
+          //TODO: In future story, update to redirect to the More Information page
+          "must go to UnderConstruction page" in {
+            navigator.nextPage(DelayReasonPage, NormalMode, emptyUserAnswers.set(DelayReasonPage, Other)) mustBe
+              testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+          }
+        }
+
+        "when reason is anything other than `Other`" - {
+
+          //TODO: In future story, update to redirect to the Select to give More Information page
+          "must go to UnderConstruction page" in {
+            navigator.nextPage(DelayReasonPage, NormalMode, emptyUserAnswers.set(DelayReasonPage, Strikes)) mustBe
+              testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+          }
+        }
+      }
     }
   }
 }

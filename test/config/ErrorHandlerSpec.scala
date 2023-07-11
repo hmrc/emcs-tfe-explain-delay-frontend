@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.emcstfeexplaindelayfrontend.config
+package config
 
 import handlers.ErrorHandler
 import org.scalatest.matchers.should.Matchers

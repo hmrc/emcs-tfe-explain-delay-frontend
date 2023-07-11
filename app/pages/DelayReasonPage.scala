@@ -16,17 +16,12 @@
 
 package pages
 
-import models.DelayType
-import pages.behaviour.PageBehaviours
+import models.DelayReason
+import play.api.libs.json.JsPath
 
-class DelayTypePageSpec extends PageBehaviours {
+case object DelayReasonPage extends QuestionPage[DelayReason] {
 
-  "DelayTypePage" - {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[DelayType](DelayTypePage)
-
-    beSettable[DelayType](DelayTypePage)
-
-    beRemovable[DelayType](DelayTypePage)
-  }
+  override def toString: String = "delayReason"
 }

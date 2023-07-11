@@ -32,7 +32,7 @@ object NoEnrolmentMessages {
 
   object English extends ViewMessages with BaseEnglish {
     override val heading = "There is a problem"
-    override val title = title("There is a problem")
+    override val title = titleHelper("There is a problem")
     override val p1 = "You are not enrolled for the Excise Movement and Control System (EMCS)."
     override val p2 = "To use this service you or the account administrator must either:"
     override val bullet1 = "enrol for EMCS"
@@ -42,7 +42,7 @@ object NoEnrolmentMessages {
 
   object Welsh extends ViewMessages with BaseWelsh {
     override val heading = "There is a problem"
-    override val title = title("There is a problem")
+    override val title = titleHelper("There is a problem")
     override val p1 = "You are not enrolled for the Excise Movement and Control System (EMCS)."
     override val p2 = "To use this service you or the account administrator must either:"
     override val bullet1 = "enrol for EMCS"
