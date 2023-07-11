@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package generators
+package utils
 
-import org.scalacheck.Arbitrary
-import pages._
+import play.api.libs.json.{Format, JsNull, JsResult, JsValue, Writes}
 
-trait PageGenerators {
+trait JsonOptionFormatter {
 
-  implicit lazy val arbitraryDelayDetailsPage: Arbitrary[DelayDetailsPage.type] =
-    Arbitrary(DelayDetailsPage)
+  implicit def optionFormat[T: Format]: Format[Option[T]] = new Format[Option[T]]{
+    override def reads(json: JsValue): JsResult[Option[T]] = json.validateOpt[T]
 
-  implicit lazy val arbitraryDelayDetailsChoicePage: Arbitrary[DelayDetailsChoicePage.type] =
-    Arbitrary(DelayDetailsChoicePage)
-
-  implicit lazy val arbitraryDelayTypePage: Arbitrary[DelayTypePage.type] =
-    Arbitrary(DelayTypePage)
-
-  implicit lazy val arbitraryDelayReasonPage: Arbitrary[DelayReasonPage.type] =
-    Arbitrary(DelayReasonPage)
+    override def writes(o: Option[T]): JsValue = o match {
+      case Some(t) ⇒ implicitly[Writes[T]].writes(t)
+      case None ⇒ JsNull
+    }
+  }
 }
+
+object JsonOptionFormatter extends JsonOptionFormatter

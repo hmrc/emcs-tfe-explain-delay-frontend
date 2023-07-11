@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages._
+import pages.behaviour.PageBehaviours
+import utils.JsonOptionFormatter
 
-trait PageGenerators {
 
-  implicit lazy val arbitraryDelayDetailsPage: Arbitrary[DelayDetailsPage.type] =
-    Arbitrary(DelayDetailsPage)
+class DelayDetailsPageSpec extends PageBehaviours with JsonOptionFormatter {
 
-  implicit lazy val arbitraryDelayDetailsChoicePage: Arbitrary[DelayDetailsChoicePage.type] =
-    Arbitrary(DelayDetailsChoicePage)
+  "DelayDetailsPage" - {
 
-  implicit lazy val arbitraryDelayTypePage: Arbitrary[DelayTypePage.type] =
-    Arbitrary(DelayTypePage)
+    beRetrievable[Option[String]](DelayDetailsPage)
 
-  implicit lazy val arbitraryDelayReasonPage: Arbitrary[DelayReasonPage.type] =
-    Arbitrary(DelayReasonPage)
+    beSettable[Option[String]](DelayDetailsPage)
+
+    beRemovable[Option[String]](DelayDetailsPage)
+  }
 }

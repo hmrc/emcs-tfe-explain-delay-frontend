@@ -33,3 +33,8 @@ GET        /:ern/:arc/delay-details-choice              controllers.DelayDetails
 POST       /:ern/:arc/delay-details-choice              controllers.DelayDetailsChoiceController.onSubmit(ern: String, arc: String, mode: Mode = NormalMode)
 GET        /:ern/:arc/delay-details-choice/change       controllers.DelayDetailsChoiceController.onPageLoad(ern: String, arc: String, mode: Mode = CheckMode)
 POST       /:ern/:arc/delay-details-choice/change       controllers.DelayDetailsChoiceController.onSubmit(ern: String, arc: String, mode: Mode = CheckMode)
+
+GET        /:ern/:arc/delay-details                     controllers.DelayDetailsController.onPageLoad(ern: String, arc: String, mode: Mode = NormalMode)
+POST       /:ern/:arc/delay-details                     controllers.DelayDetailsController.onSubmit(ern: String, arc: String, mode: Mode = NormalMode)
+GET        /:ern/:arc/delay-details/change              controllers.DelayDetailsController.onPageLoad(ern: String, arc: String, mode: Mode = CheckMode)
+POST       /:ern/:arc/delay-details/change              controllers.DelayDetailsController.onSubmit(ern: String, arc: String, mode: Mode = CheckMode)

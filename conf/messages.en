@@ -99,6 +99,16 @@ delayReason.checkYourAnswersLabel = Reason for delay
 delayReason.error.required = Select reason for the delay
 delayReason.change.hidden = reason for delay
 
+delayDetails.title = Give more information about the delay
+delayDetails.heading = Give more information about the delay
+delayDetails.hint = Give information (optional).
+delayDetails.checkYourAnswersLabel = Give more information about the delay
+delayDetails.error.length = Information must be 350 characters or less
+delayDetails.error.character = Information must contain letters or numbers
+delayDetails.error.xss = Information must not include < and > and : and ;
+delayDetails.error.required = Give information about the other reason for the delay
+delayDetails.change.hidden = DelayDetails
+
 journeyRecovery.title = There is a problem
 journeyRecovery.heading = There is a problem
 journeyRecovery.p1 = You have not added any information to explain a delay yet.

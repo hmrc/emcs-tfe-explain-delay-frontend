@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-package generators
-
-import org.scalacheck.Arbitrary
-import pages._
-
-trait PageGenerators {
-
-  implicit lazy val arbitraryDelayDetailsPage: Arbitrary[DelayDetailsPage.type] =
-    Arbitrary(DelayDetailsPage)
-
-  implicit lazy val arbitraryDelayDetailsChoicePage: Arbitrary[DelayDetailsChoicePage.type] =
-    Arbitrary(DelayDetailsChoicePage)
-
-  implicit lazy val arbitraryDelayTypePage: Arbitrary[DelayTypePage.type] =
-    Arbitrary(DelayTypePage)
-
-  implicit lazy val arbitraryDelayReasonPage: Arbitrary[DelayReasonPage.type] =
-    Arbitrary(DelayReasonPage)
+package object forms {
+  private[forms] val TEXTAREA_MAX_LENGTH = 350
+  private[forms] val ALPHANUMERIC_REGEX = "^(?s)(?=.*[A-Za-z0-9]).{1,}$"
+  private[forms] val XSS_REGEX = "^(?s)(?!.*javascript)(?!.*[<>;:]).{1,}$"
 }
