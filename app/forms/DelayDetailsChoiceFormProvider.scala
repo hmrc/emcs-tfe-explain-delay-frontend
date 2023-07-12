@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages._
+import javax.inject.Inject
 
-trait PageGenerators {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  implicit lazy val arbitraryDelayDetailsChoicePage: Arbitrary[DelayDetailsChoicePage.type] =
-    Arbitrary(DelayDetailsChoicePage)
+class DelayDetailsChoiceFormProvider @Inject() extends Mappings {
 
-  implicit lazy val arbitraryDelayReasonPage: Arbitrary[DelayReasonPage.type] =
-    Arbitrary(DelayReasonPage)
-
-  implicit lazy val arbitraryDelayTypePage: Arbitrary[DelayTypePage.type] =
-    Arbitrary(DelayTypePage)
-
-
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("delayDetailsChoice.error.required")
+    )
 }

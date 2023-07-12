@@ -112,3 +112,7 @@ journeyRecovery.p3 = You can also choose to
 journeyRecovery.p3.viewAccountLink = view all your account information
 journeyRecovery.p3.or = or
 journeyRecovery.p3.signOutLink = sign out
+
+delayDetailsChoice.title = Do you want to give any more information about the delay?
+delayDetailsChoice.heading = Do you want to give any more information about the delay?
+delayDetailsChoice.error.required = Select yes if you want to give more information about the delay

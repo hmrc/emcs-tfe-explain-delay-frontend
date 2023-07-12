@@ -30,6 +30,7 @@ object DelayTypeMessages {
     val delayTypeLegend: String
     val radioOption1: String
     val radioOption2: String
+    val requiredError: String
     val cyaLabel: String
     val cyaChangeHidden: String
   }
@@ -42,6 +43,7 @@ object DelayTypeMessages {
     override val delayTypeLegend: String = "What’s been delayed?"
     override val radioOption1: String = "Submitting a report of receipt"
     override val radioOption2: String = "Providing a consignee or change of destination for the movement"
+    override val requiredError: String = "Select what’s been delayed"
     override val cyaLabel: String = "What’s been delayed"
     override val cyaChangeHidden: String = "what’s been delayed"
   }
@@ -54,6 +56,7 @@ object DelayTypeMessages {
     override val delayTypeLegend: String = "What’s been delayed?"
     override val radioOption1: String = "Submitting a report of receipt"
     override val radioOption2: String = "Providing a consignee or change of destination for the movement"
+    override val requiredError: String = "Select what’s been delayed"
     override val cyaLabel: String = "What’s been delayed"
     override val cyaChangeHidden: String = "what’s been delayed"
   }

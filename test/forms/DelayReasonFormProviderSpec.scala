@@ -16,18 +16,20 @@
 
 package forms
 
+import fixtures.messages.DelayReasonMessages
 import forms.behaviours.OptionFieldBehaviours
 import models.DelayReason
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.data.FormError
+import play.api.i18n.{Messages, MessagesApi}
 
-class DelayReasonFormProviderSpec extends OptionFieldBehaviours {
+class DelayReasonFormProviderSpec extends OptionFieldBehaviours with GuiceOneAppPerSuite {
 
   val form = new DelayReasonFormProvider()()
+  val fieldName = "value"
+  val requiredKey = "delayReason.error.required"
 
   ".value" - {
-
-    val fieldName = "value"
-    val requiredKey = "delayReason.error.required"
 
     behave like optionsField[DelayReason](
       form,
@@ -41,5 +43,20 @@ class DelayReasonFormProviderSpec extends OptionFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+  }
+
+  "Error Messages" - {
+
+    Seq(DelayReasonMessages.English, DelayReasonMessages.Welsh) foreach { messagesForLanguage =>
+
+      implicit val messages: Messages = app.injector.instanceOf[MessagesApi].preferred(Seq(messagesForLanguage.lang))
+
+      s"when output for language code '${messagesForLanguage.lang.code}'" - {
+
+        "have the correct error message for date required" in {
+          messages(requiredKey) mustBe messagesForLanguage.requiredError
+        }
+      }
+    }
   }
 }

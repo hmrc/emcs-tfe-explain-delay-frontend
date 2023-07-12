@@ -58,9 +58,29 @@ class NavigatorSpec extends SpecBase {
 
         "when reason is anything other than `Other`" - {
 
-          //TODO: In future story, update to redirect to the Select to give More Information page
-          "must go to UnderConstruction page" in {
+          "must go to DelayDetailsChoice page" in {
             navigator.nextPage(DelayReasonPage, NormalMode, emptyUserAnswers.set(DelayReasonPage, Strikes)) mustBe
+              routes.DelayDetailsChoiceController.onPageLoad(testErn, testArc, NormalMode)
+          }
+        }
+      }
+
+      "for the DelayDetailsChoicePage page" - {
+
+        "when answer is 'Yes' (true)" - {
+
+          //TODO: In future story, update to redirect to the More Information page
+          "must go to UnderConstruction page" in {
+            navigator.nextPage(DelayDetailsChoicePage, NormalMode, emptyUserAnswers.set(DelayDetailsChoicePage, true)) mustBe
+              testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+          }
+        }
+
+        "when answer is 'No' (false)" - {
+
+          //TODO: In future story, update to redirect to the Check Answers page
+          "must go to UnderConstruction page" in {
+            navigator.nextPage(DelayDetailsChoicePage, NormalMode, emptyUserAnswers.set(DelayDetailsChoicePage, false)) mustBe
               testOnly.controllers.routes.UnderConstructionController.onPageLoad()
           }
         }

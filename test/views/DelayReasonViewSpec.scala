@@ -30,9 +30,7 @@ import views.html.DelayReasonView
 
 class DelayReasonViewSpec extends ViewSpecBase with ViewBehaviours {
 
-  object Selectors extends BaseSelectors {
-    val delayTypeLegend = "main legend"
-  }
+  object Selectors extends BaseSelectors
 
   lazy val form = app.injector.instanceOf[DelayReasonFormProvider].apply()
   lazy val view = app.injector.instanceOf[DelayReasonView]

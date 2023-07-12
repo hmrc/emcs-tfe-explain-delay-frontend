@@ -16,26 +16,27 @@
 
 package forms
 
-import fixtures.messages.DelayTypeMessages
-import forms.behaviours.OptionFieldBehaviours
-import models.DelayType
+import fixtures.messages.DelayDetailsChoiceMessages
+import forms.behaviours.BooleanFieldBehaviours
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.data.FormError
 import play.api.i18n.{Messages, MessagesApi}
 
-class DelayTypeFormProviderSpec extends OptionFieldBehaviours with GuiceOneAppPerSuite {
+class DelayDetailsChoiceFormProviderSpec extends BooleanFieldBehaviours with GuiceOneAppPerSuite {
 
-  val form = new DelayTypeFormProvider()()
-  val fieldName = "value"
-  val requiredKey = "delayType.error.required"
+  val requiredKey = "delayDetailsChoice.error.required"
+  val invalidKey = "error.boolean"
+
+  val form = new DelayDetailsChoiceFormProvider()()
 
   ".value" - {
 
-    behave like optionsField[DelayType](
+    val fieldName = "value"
+
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = DelayType.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(
@@ -47,14 +48,14 @@ class DelayTypeFormProviderSpec extends OptionFieldBehaviours with GuiceOneAppPe
 
   "Error Messages" - {
 
-    Seq(DelayTypeMessages.English, DelayTypeMessages.Welsh) foreach { messagesForLanguage =>
+    Seq(DelayDetailsChoiceMessages.English, DelayDetailsChoiceMessages.Welsh) foreach { messagesForLanguage =>
 
       implicit val messages: Messages = app.injector.instanceOf[MessagesApi].preferred(Seq(messagesForLanguage.lang))
 
       s"when output for language code '${messagesForLanguage.lang.code}'" - {
 
         "have the correct error message for date required" in {
-          messages(requiredKey) mustBe messagesForLanguage.requiredError
+          messages(requiredKey) mustBe messagesForLanguage.errorRequired
         }
       }
     }

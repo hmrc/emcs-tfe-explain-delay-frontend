@@ -19,7 +19,7 @@ package navigation
 import controllers.routes
 import models.DelayReason.Other
 import models.{Mode, NormalMode, UserAnswers}
-import pages.{DelayReasonPage, DelayTypePage, Page}
+import pages.{DelayDetailsChoicePage, DelayReasonPage, DelayTypePage, Page}
 import play.api.mvc.Call
 
 import javax.inject.Inject
@@ -27,19 +27,27 @@ import javax.inject.Inject
 class Navigator @Inject()() extends BaseNavigator {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case DelayTypePage =>
-      (userAnswers: UserAnswers) => routes.DelayReasonController.onPageLoad(userAnswers.ern, userAnswers.arc, NormalMode)
+    case DelayTypePage => (userAnswers: UserAnswers) =>
+      routes.DelayReasonController.onPageLoad(userAnswers.ern, userAnswers.arc, NormalMode)
     case DelayReasonPage => (userAnswers: UserAnswers) =>
       userAnswers.get(DelayReasonPage) match {
         case Some(Other) =>
           //TODO: Redirect to the More Information page as part of future story
           testOnly.controllers.routes.UnderConstructionController.onPageLoad()
         case _ =>
-          //TODO: Redirect to Choose to Provide More Information page as part of future story
+          routes.DelayDetailsChoiceController.onPageLoad(userAnswers.ern, userAnswers.arc, NormalMode)
+      }
+    case DelayDetailsChoicePage => (userAnswers: UserAnswers) =>
+      userAnswers.get(DelayDetailsChoicePage) match {
+        case Some(true) =>
+          //TODO: Redirect to the More Information page as part of future story
+          testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+        case _ =>
+          //TODO: Redirect to the Check Answers page as part of future story
           testOnly.controllers.routes.UnderConstructionController.onPageLoad()
       }
-    case _ =>
-      (userAnswers: UserAnswers) => routes.IndexController.onPageLoad(userAnswers.ern, userAnswers.arc)
+    case _ => (userAnswers: UserAnswers) =>
+      routes.IndexController.onPageLoad(userAnswers.ern, userAnswers.arc)
   }
 
 
