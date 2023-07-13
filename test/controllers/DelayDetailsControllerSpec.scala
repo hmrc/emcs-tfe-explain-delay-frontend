@@ -60,7 +60,13 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
         .set(DelayDetailsPage, Some("answer"))
     )
 
-    "must return OK and the correct view for a GET" in new Fixture(userAnswers) {
+    val userAnswersUptoThisController = Some(
+      emptyUserAnswers
+        .set(DelayTypePage, ReportOfReceipt)
+        .set(DelayReasonPage, DelayReason.Other)
+    )
+
+    "must return OK and the correct view for a GET when the question has not been previously answered" in new Fixture(userAnswersUptoThisController) {
       running(application) {
         val request = FakeRequest(GET, delayDetailsRoute)
 
@@ -69,7 +75,7 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
         val view = application.injector.instanceOf[DelayDetailsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(Some("answer")), fieldIsMandatory = true, NormalMode)(dataRequest(request), messages(application)).toString
+        contentAsString(result) mustEqual view(form, fieldIsMandatory = true, NormalMode)(dataRequest(request), messages(application)).toString
       }
     }
 
@@ -117,7 +123,7 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in new Fixture( None ) {
+    "must redirect to Journey Recovery for a GET if no existing data is found" in new Fixture(None) {
       running(application) {
         val request = FakeRequest(GET, delayDetailsRoute)
 
@@ -128,7 +134,7 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in new Fixture( None ) {
+    "must redirect to Journey Recovery for a POST if no existing data is found" in new Fixture(None) {
       running(application) {
         val request =
           FakeRequest(POST, delayDetailsRoute)
