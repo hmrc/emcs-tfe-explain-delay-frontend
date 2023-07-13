@@ -31,6 +31,7 @@ trait UserAnswersGenerator extends TryValues with BaseFixtures {
     arbitrary[(DelayDetailsChoicePage.type, JsValue)] ::
     arbitrary[(DelayReasonPage.type, JsValue)] ::
     arbitrary[(DelayTypePage.type, JsValue)] ::
+    arbitrary[(DelayDetailsPage.type, JsValue)] ::
     Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {

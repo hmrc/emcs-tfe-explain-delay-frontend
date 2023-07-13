@@ -19,7 +19,7 @@ package navigation
 import controllers.routes
 import models.DelayReason.Other
 import models.{Mode, NormalMode, UserAnswers}
-import pages.{DelayDetailsChoicePage, DelayReasonPage, DelayTypePage, Page}
+import pages._
 import play.api.mvc.Call
 
 import javax.inject.Inject
@@ -32,20 +32,21 @@ class Navigator @Inject()() extends BaseNavigator {
     case DelayReasonPage => (userAnswers: UserAnswers) =>
       userAnswers.get(DelayReasonPage) match {
         case Some(Other) =>
-          //TODO: Redirect to the More Information page as part of future story
-          testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+          routes.DelayDetailsController.onPageLoad(userAnswers.ern, userAnswers.arc, NormalMode)
         case _ =>
           routes.DelayDetailsChoiceController.onPageLoad(userAnswers.ern, userAnswers.arc, NormalMode)
       }
     case DelayDetailsChoicePage => (userAnswers: UserAnswers) =>
       userAnswers.get(DelayDetailsChoicePage) match {
         case Some(true) =>
-          //TODO: Redirect to the More Information page as part of future story
-          testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+          routes.DelayDetailsController.onPageLoad(userAnswers.ern, userAnswers.arc, NormalMode)
         case _ =>
           //TODO: Redirect to the Check Answers page as part of future story
           testOnly.controllers.routes.UnderConstructionController.onPageLoad()
       }
+    case DelayDetailsPage =>
+      // TODO: Redirect to check your answers page as part of a future story
+      (_: UserAnswers) => testOnly.controllers.routes.UnderConstructionController.onPageLoad()
     case _ => (userAnswers: UserAnswers) =>
       routes.IndexController.onPageLoad(userAnswers.ern, userAnswers.arc)
   }
