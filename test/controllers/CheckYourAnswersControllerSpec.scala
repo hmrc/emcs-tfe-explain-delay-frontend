@@ -17,35 +17,41 @@
 package controllers
 
 import base.SpecBase
-import mocks.services.MockUserAnswersService
+import handlers.ErrorHandler
+import mocks.services.{MockSubmitExplainDelayService, MockUserAnswersService}
 import models.DelayReason.Strikes
 import models.DelayType.ReportOfReceipt
-import models.{ConfirmationDetails, UserAnswers}
+import models.response.emcsTfe.SubmitExplainDelayResponse
+import models.{ConfirmationDetails, MissingMandatoryPage, SubmitExplainDelayException, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.{CheckYourAnswersPage, DelayDetailsPage, DelayReasonPage, DelayTypePage}
+import pages.{ConfirmationPage, DelayDetailsPage, DelayReasonPage, DelayTypePage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.UserAnswersService
+import services.{SubmitExplainDelayService, UserAnswersService}
 import views.html.CheckYourAnswersView
 
 import scala.concurrent.Future
 
-class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersService {
+class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersService with MockSubmitExplainDelayService {
 
   class Fixture(val userAnswers: Option[UserAnswers] = Some(emptyUserAnswers
     .set(DelayTypePage, ReportOfReceipt)
     .set(DelayReasonPage, Strikes)
+    .set(DelayDetailsPage, None)
   )) {
     val application = applicationBuilder(userAnswers)
       .overrides(
         bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-        bind[UserAnswersService].toInstance(mockUserAnswersService)
+        bind[UserAnswersService].toInstance(mockUserAnswersService),
+        bind[SubmitExplainDelayService].toInstance(mockSubmitExplainDelayService)
       )
       .build()
 
     lazy val view = application.injector.instanceOf[CheckYourAnswersView]
+    lazy val errorHandler = application.injector.instanceOf[ErrorHandler]
+
     implicit lazy val msgs = messages(application)
   }
 
@@ -73,7 +79,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
             implicit val _dataRequest = dataRequest(getRequest, userAnswers.get)
 
             status(result) mustEqual OK
-        contentAsString(result) mustEqual view(checkAnswersSubmitAction).toString}
+            contentAsString(result) mustEqual view(checkAnswersSubmitAction).toString
+          }
         }
       }
 
@@ -97,35 +104,79 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
 
       "when UserAnswers exist" - {
 
-        "must save the ConfirmationDetails and redirect to the onward route" in new Fixture(Some(
-          emptyUserAnswers
-            .set(DelayTypePage, ReportOfReceipt)
-            .set(DelayReasonPage, Strikes)
-        )) {
-          running(application) {
+        "when the submission is successful" - {
 
-            val updatedAnswers = userAnswers.get.set(CheckYourAnswersPage, ConfirmationDetails(testConfirmationReference))
+          "must save the ConfirmationDetails and redirect to the onward route" in new Fixture(Some(
+            emptyUserAnswers
+              .set(DelayTypePage, ReportOfReceipt)
+              .set(DelayReasonPage, Strikes)
+              .set(DelayDetailsPage, None)
+          )) {
+            running(application) {
 
-            MockUserAnswersService.set(updatedAnswers).returns(Future.successful(updatedAnswers))
+              val successResponse = SubmitExplainDelayResponse(receipt = testConfirmationReference, receiptDate = testReceiptDate)
 
-            val result = route(application, postRequest).value
+              MockSubmitExplainDelayService.submit(testErn, testArc, getMovementResponseModel, userAnswers.get)
+                .returns(Future.successful(successResponse))
 
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result) mustBe Some(onwardRoute.url)
+              val updatedAnswers = userAnswers.get.set(ConfirmationPage,
+                ConfirmationDetails(
+                  receipt = testConfirmationReference,
+                  delayType = ReportOfReceipt,
+                  delayReason = Strikes,
+                  delayDetails = None
+                )
+              )
+
+              MockUserAnswersService.set().returns(Future.successful(updatedAnswers))
+
+              val result = route(application, postRequest).value
+
+              status(result) mustEqual SEE_OTHER
+              redirectLocation(result) mustBe Some(onwardRoute.url)
+            }
           }
+
         }
-      }
 
-      "when UserAnswers DO NOT exist" - {
+        "when the submission fails" - {
 
-        "must return SEE_OTHER and redirect to Journey Recovery" in new Fixture(None) {
-          running(application) {
+          "must render an internal server error" in new Fixture(Some(
+            emptyUserAnswers
+              .set(DelayTypePage, ReportOfReceipt)
+              .set(DelayReasonPage, Strikes)
+              .set(DelayDetailsPage, None)
+          )) {
 
-            val result = route(application, postRequest).value
+            running(application) {
 
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result) mustBe Some(routes.JourneyRecoveryController.onPageLoad(testErn, testArc).url)
+              MockSubmitExplainDelayService.submit(testErn, testArc, getMovementResponseModel, userAnswers.get)
+                .returns(Future.failed(SubmitExplainDelayException("some exception occurred")))
+
+              val result = route(application, postRequest).value
+
+              status(result) mustBe INTERNAL_SERVER_ERROR
+              contentAsString(result) mustBe errorHandler.internalServerErrorTemplate(postRequest).toString()
+            }
           }
+
+          "when invalid data exists so the submission can NOT be generated" - {
+
+            "must return BadRequest" in new Fixture(Some(emptyUserAnswers)) {
+
+              running(application) {
+
+                MockSubmitExplainDelayService.submit(testErn, testArc, getMovementResponseModel, emptyUserAnswers)
+                  .returns(Future.failed(MissingMandatoryPage("bang")))
+
+                val result = route(application, postRequest).value
+
+                status(result) mustBe BAD_REQUEST
+                contentAsString(result) mustBe errorHandler.badRequestTemplate(postRequest).toString()
+              }
+            }
+          }
+
         }
       }
     }

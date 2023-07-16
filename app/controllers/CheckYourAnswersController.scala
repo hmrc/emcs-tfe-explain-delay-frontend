@@ -17,12 +17,19 @@
 package controllers
 
 import controllers.actions._
-import models.{ConfirmationDetails, NormalMode}
+import handlers.ErrorHandler
+import models.requests.DataRequest
+import models.response.emcsTfe.SubmitExplainDelayResponse
+import models.{ConfirmationDetails, MissingMandatoryPage, NormalMode, UserAnswers}
 import navigation.Navigator
-import pages.CheckYourAnswersPage
+import pages._
 import play.api.i18n.MessagesApi
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.UserAnswersService
+import services.{SubmitExplainDelayService, UserAnswersService}
+import uk.gov.hmrc.http.HeaderCarrier
+import utils.JsonOptionFormatter.optionFormat
+import viewmodels.checkAnswers.DelayDetailsSummary
 import views.html.CheckYourAnswersView
 
 import javax.inject.Inject
@@ -37,8 +44,11 @@ class CheckYourAnswersController @Inject()(
                                             override val getData: DataRetrievalAction,
                                             override val requireData: DataRequiredAction,
                                             override val userAllowList: UserAllowListAction,
+                                            val submitExplainDelayService: SubmitExplainDelayService,
+                                            val delayDetailsSummary: DelayDetailsSummary,
                                             val controllerComponents: MessagesControllerComponents,
-                                            view: CheckYourAnswersView
+                                            view: CheckYourAnswersView,
+                                            errorHandler: ErrorHandler
                                           ) extends BaseNavigationController with AuthActionHelper {
 
   def onPageLoad(ern: String, arc: String): Action[AnyContent] =
@@ -47,8 +57,43 @@ class CheckYourAnswersController @Inject()(
     }
 
   def onSubmit(ern: String, arc: String): Action[AnyContent] =
-    authorisedDataRequestWithCachedMovementAsync(ern, arc) { implicit request =>
-      val reference = "UYVQBLMXCYK6HAEBZI7TSWAQ6XDTXFYU" //TODO: Create submission model and send to BE, then handle response
-      saveAndRedirect(CheckYourAnswersPage, ConfirmationDetails(reference), NormalMode)
+    authorisedDataRequestWithUpToDateMovementAsync(ern, arc) { implicit request =>
+      submitExplainDelayService.submit(ern, arc).flatMap { response =>
+
+        deleteDraftAndSetConfirmationFlow(request.internalId, request.ern, request.arc, response).map { _ =>
+          Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode, request.userAnswers))
+        }
+
+      } recover {
+        case _: MissingMandatoryPage =>
+          BadRequest(errorHandler.badRequestTemplate)
+        case _ =>
+          InternalServerError(errorHandler.internalServerErrorTemplate)
+      }
     }
+
+  private def deleteDraftAndSetConfirmationFlow(internalId: String,
+                                                ern: String,
+                                                arc: String,
+                                                response: SubmitExplainDelayResponse)
+                                               (implicit hc: HeaderCarrier, request: DataRequest[_]): Future[UserAnswers] = {
+    userAnswersService.set(
+      UserAnswers(
+        internalId,
+        ern,
+        arc,
+        data = Json.obj(
+          ConfirmationPage.toString ->
+            ConfirmationDetails(
+              receipt = response.receipt,
+              delayType = request.userAnswers.get(DelayTypePage).get,
+              delayReason = request.userAnswers.get(DelayReasonPage).get,
+              delayDetails = request.userAnswers.get(DelayDetailsPage).flatten
+            )
+        )
+      )
+    )
+  }
 }
+
+

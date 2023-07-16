@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package models.response.emcsTfe
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json}
 
-case class ConfirmationDetails(
-                                receipt: String,
-                                delayType: DelayType,
-                                delayReason: DelayReason,
-                                delayDetails: Option[String]
-                              )
+case class SubmitExplainDelayResponse(receipt: String, receiptDate: String)
 
-object ConfirmationDetails {
-  implicit def format: OFormat[ConfirmationDetails] = Json.format[ConfirmationDetails]
+object SubmitExplainDelayResponse {
+  implicit val format: Format[SubmitExplainDelayResponse] = Json.format
 }

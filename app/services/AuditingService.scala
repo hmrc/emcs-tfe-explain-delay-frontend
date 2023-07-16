@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-import play.api.libs.json.{Json, OFormat}
+import models.audit.AuditModel
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
-case class ConfirmationDetails(
-                                receipt: String,
-                                delayType: DelayType,
-                                delayReason: DelayReason,
-                                delayDetails: Option[String]
-                              )
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.ExecutionContext
 
-object ConfirmationDetails {
-  implicit def format: OFormat[ConfirmationDetails] = Json.format[ConfirmationDetails]
+@Singleton
+class AuditingService @Inject()(auditConnector: AuditConnector)(implicit ec: ExecutionContext) {
+
+  def audit(auditModel: AuditModel)(implicit hc: HeaderCarrier): Unit = {
+    auditConnector.sendExplicitAudit(auditModel.auditType, auditModel.detail)
+  }
+
 }

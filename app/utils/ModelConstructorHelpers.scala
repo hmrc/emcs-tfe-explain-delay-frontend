@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package utils
 
-import play.api.libs.json.{Json, OFormat}
+import models.{MissingMandatoryPage, UserAnswers}
+import pages.QuestionPage
+import play.api.libs.json.Reads
 
-case class ConfirmationDetails(
-                                receipt: String,
-                                delayType: DelayType,
-                                delayReason: DelayReason,
-                                delayDetails: Option[String]
-                              )
+trait ModelConstructorHelpers extends Logging {
 
-object ConfirmationDetails {
-  implicit def format: OFormat[ConfirmationDetails] = Json.format[ConfirmationDetails]
+  def mandatoryPage[A](page: QuestionPage[A])(implicit userAnswers: UserAnswers, rds: Reads[A]): A = userAnswers.get(page) match {
+    case Some(a) => a
+    case None =>
+      logger.error(s"Missing mandatory UserAnswer for page: '$page'")
+      throw MissingMandatoryPage(s"Missing mandatory UserAnswer for page: '$page'")
+  }
 }

@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package models.audit
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsValue
 
-case class ConfirmationDetails(
-                                receipt: String,
-                                delayType: DelayType,
-                                delayReason: DelayReason,
-                                delayDetails: Option[String]
-                              )
-
-object ConfirmationDetails {
-  implicit def format: OFormat[ConfirmationDetails] = Json.format[ConfirmationDetails]
+trait AuditModel {
+  val detail: JsValue
+  val auditType: String
 }

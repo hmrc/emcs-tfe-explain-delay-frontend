@@ -17,15 +17,16 @@
 package controllers
 
 import controllers.actions._
+import handlers.ErrorHandler
+import models.ConfirmationDetails
 import navigation.Navigator
-import pages.CheckYourAnswersPage
+import pages.ConfirmationPage
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserAnswersService
 import views.html.ConfirmationView
 
 import javax.inject.Inject
-import scala.concurrent.Future
 
 class ConfirmationController @Inject()(
                                         override val messagesApi: MessagesApi,
@@ -37,13 +38,20 @@ class ConfirmationController @Inject()(
                                         override val requireData: DataRequiredAction,
                                         override val userAllowList: UserAllowListAction,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: ConfirmationView
+                                        view: ConfirmationView,
+                                        errorHandler: ErrorHandler
                                       ) extends BaseNavigationController with AuthActionHelper {
 
   def onPageLoad(ern: String, arc: String): Action[AnyContent] =
-    authorisedDataRequestWithCachedMovementAsync(ern, arc) { implicit request =>
-      withAnswer(CheckYourAnswersPage) { confirmationDetails =>
-        Future.successful(Ok(view(confirmationDetails)))
+    authorisedDataRequestWithCachedMovement(ern, arc) { implicit request =>
+      request.userAnswers.get(ConfirmationPage) match {
+        case Some(confirmationDetails: ConfirmationDetails) =>
+          logger.info("[onPageLoad] Successful Explain Delay confirmation page displayed")
+          Ok(view(confirmationDetails))
+        case None =>
+          logger.warn("[onPageLoad] Could not retrieve submission confirmation details from User session")
+          Redirect(routes.JourneyRecoveryController.onPageLoad(ern, arc))
       }
     }
+
 }

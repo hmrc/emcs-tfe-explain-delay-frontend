@@ -32,6 +32,8 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, configuration: Configu
 
   private lazy val host: String = configuration.get[String]("host")
 
+  lazy val appName: String = configuration.get[String]("appName")
+
   lazy val selfUrl: String = servicesConfig.baseUrl("emcs-tfe-explain-delay-frontend")
 
   lazy val timeout: Int = configuration.get[Int]("timeout-dialog.timeout")

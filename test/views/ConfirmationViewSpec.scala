@@ -19,6 +19,8 @@ package views
 import base.ViewSpecBase
 import fixtures.messages.ConfirmationMessages
 import models.ConfirmationDetails
+import models.DelayReason.Strikes
+import models.DelayType.ReportOfReceipt
 import models.requests.DataRequest
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -42,7 +44,15 @@ class ConfirmationViewSpec extends ViewSpecBase with ViewBehaviours {
         implicit lazy val msgs: Messages = messages(app, messagesForLanguage.lang)
         implicit lazy val request: DataRequest[AnyContentAsEmpty.type] = dataRequest(FakeRequest(), emptyUserAnswers)
 
-        implicit val doc: Document = Jsoup.parse(view(ConfirmationDetails(testConfirmationReference)).toString())
+        implicit val doc: Document = Jsoup.parse(
+          view(
+            ConfirmationDetails(
+              receipt = testConfirmationReference,
+              delayType = ReportOfReceipt,
+              delayReason = Strikes,
+              delayDetails = None
+            )
+          ).toString())
 
         behave like pageWithExpectedElementsAndMessages(Seq(
           Selectors.title -> messagesForLanguage.title,

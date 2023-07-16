@@ -30,6 +30,7 @@ case class GetMovementResponse(arc: String,
                                deliveryPlaceTrader: Option[TraderModel],
                                localReferenceNumber: String,
                                eadStatus: String,
+                               consignorTrader: ConsignorTraderModel,
                                dateOfDispatch: LocalDate,
                                journeyTime: String,
                                numberOfItems: Int) {
