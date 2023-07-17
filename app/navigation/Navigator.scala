@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.DelayReason.Other
-import models.{Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages._
 import play.api.mvc.Call
 
@@ -41,18 +41,34 @@ class Navigator @Inject()() extends BaseNavigator {
         case Some(true) =>
           routes.DelayDetailsController.onPageLoad(userAnswers.ern, userAnswers.arc, NormalMode)
         case _ =>
-          //TODO: Redirect to the Check Answers page as part of future story
-          testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+          routes.CheckYourAnswersController.onPageLoad(userAnswers.ern, userAnswers.arc)
       }
-    case DelayDetailsPage =>
-      // TODO: Redirect to check your answers page as part of a future story
-      (_: UserAnswers) => testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+    case DelayDetailsPage => (userAnswers: UserAnswers) =>
+      routes.CheckYourAnswersController.onPageLoad(userAnswers.ern, userAnswers.arc)
+    case CheckYourAnswersPage => (_: UserAnswers) =>
+      //TODO: Redirect to the Confirmation page as part of future story
+      testOnly.controllers.routes.UnderConstructionController.onPageLoad()
     case _ => (userAnswers: UserAnswers) =>
       routes.IndexController.onPageLoad(userAnswers.ern, userAnswers.arc)
+  }
+
+  private val checkRoutes: Page => UserAnswers => Call = {
+    case DelayReasonPage => (userAnswers: UserAnswers) => delayReasonCheckRouting(userAnswers)
+    case _ => (userAnswers: UserAnswers) =>
+      routes.CheckYourAnswersController.onPageLoad(userAnswers.ern, userAnswers.arc)
+  }
+
+
+  def delayReasonCheckRouting(userAnswers: UserAnswers): Call = {
+    userAnswers.get(DelayReasonPage) match {
+      case Some(Other) => routes.DelayDetailsController.onPageLoad(userAnswers.ern, userAnswers.arc, CheckMode)
+      case _ => routes.CheckYourAnswersController.onPageLoad(userAnswers.ern, userAnswers.arc)
+    }
   }
 
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode => normalRoutes(page)(userAnswers)
+    case CheckMode => checkRoutes(page)(userAnswers)
   }
 }

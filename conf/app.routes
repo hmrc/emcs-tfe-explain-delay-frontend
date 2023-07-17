@@ -38,3 +38,6 @@ GET        /:ern/:arc/delay-details                     controllers.DelayDetails
 POST       /:ern/:arc/delay-details                     controllers.DelayDetailsController.onSubmit(ern: String, arc: String, mode: Mode = NormalMode)
 GET        /:ern/:arc/delay-details/change              controllers.DelayDetailsController.onPageLoad(ern: String, arc: String, mode: Mode = CheckMode)
 POST       /:ern/:arc/delay-details/change              controllers.DelayDetailsController.onSubmit(ern: String, arc: String, mode: Mode = CheckMode)
+
+GET        /:ern/:arc/check-answers-delay               controllers.CheckYourAnswersController.onPageLoad(ern: String, arc: String)
+POST       /:ern/:arc/check-answers-delay               controllers.CheckYourAnswersController.onSubmit(ern: String, arc: String)

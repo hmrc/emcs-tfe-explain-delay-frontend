@@ -19,31 +19,28 @@ package fixtures.messages
 import fixtures.i18n
 
 
-object DelayDetailsMessages {
+object CheckYourAnswersMessages {
 
   sealed trait ViewMessages { _: i18n =>
     val heading: String
     val title: String
-    val hint: Boolean => String
-    val cyaLabel: String
-    val noDelayInformationValue: String
-    val cyaChangeHidden: String
+    val h2: String
+    val p1: String
+    val submit: String
   }
   object English extends ViewMessages with BaseEnglish {
-    val heading: String = "Give more information about the delay"
+    val heading: String = "Check your answers"
     val title: String = titleHelper(heading)
-    override val hint: Boolean => String = value => if (value) "" else "Give information (optional)."
-    val cyaLabel = "More information about the delay"
-    val noDelayInformationValue = "Give more information about the delay"
-    val cyaChangeHidden = "DelayDetails"
+    val h2: String = "Now submit your explanation for delay"
+    val p1: String = "By submitting this explanation for delay you are confirming that, to the best of your knowledge, the details you are providing are correct."
+    val submit: String = "Submit explanation for delay"
   }
   object Welsh extends ViewMessages with BaseWelsh {
-    val heading: String = "Give more information about the delay"
+    val heading: String = "Check your answers"
     val title: String = titleHelper(heading)
-    override val hint: Boolean => String = value => if (value) "" else "Give information (optional)."
-    val cyaLabel = "More information about the delay"
-    val noDelayInformationValue = "Give more information about the delay"
-    val cyaChangeHidden = "DelayDetails"
+    val h2: String = "Now submit your explanation for delay"
+    val p1: String = "By submitting this explanation for delay you are confirming that, to the best of your knowledge, the details you are providing are correct."
+    val submit: String = "Submit explanation for delay"
   }
 
 }
