@@ -17,28 +17,48 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
+import views.html.components.link
 import models.{CheckMode, UserAnswers}
 import pages.DelayDetailsPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.JsonOptionFormatter.optionFormat
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
+import javax.inject.Inject
 
-object DelayDetailsSummary  {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(DelayDetailsPage).map {
-      answer =>
+class DelayDetailsSummary @Inject()(link: link) {
+  def row(answers: UserAnswers)(implicit messages: Messages): SummaryListRow = {
 
+    answers.get(DelayDetailsPage).flatten match {
+
+      case Some(answer) =>
         SummaryListRowViewModel(
-          key     = "delayDetails.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlFormat.escape(answer.getOrElse("")).toString()),
+          key = "delayDetails.checkYourAnswersLabel",
+          value = ValueViewModel(HtmlContent(
+            HtmlFormat.escape(answer)
+          )),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.DelayDetailsController.onPageLoad(answers.ern, answers.arc, CheckMode).url, DelayDetailsPage)
-              .withVisuallyHiddenText(messages("delayDetails.change.hidden"))
+            ActionItemViewModel(
+              content = "site.change",
+              href = routes.DelayDetailsController.onPageLoad(answers.ern, answers.arc, CheckMode).url,
+              id = DelayDetailsPage
+            ).withVisuallyHiddenText(messages("delayDetails.change.hidden"))
           )
         )
+
+      case _ => SummaryListRowViewModel(
+        key = "delayDetails.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlContent(
+          link(
+            routes.DelayDetailsController.onPageLoad(answers.ern, answers.arc, CheckMode).url,
+            "delayDetails.checkYourAnswers.noDelayInformationValue"
+          )
+        ))
+      )
     }
+  }
 }

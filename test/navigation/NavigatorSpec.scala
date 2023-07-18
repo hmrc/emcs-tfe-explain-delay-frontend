@@ -76,11 +76,60 @@ class NavigatorSpec extends SpecBase {
 
         "when answer is 'No' (false)" - {
 
-          //TODO: In future story, update to redirect to the Check Answers page
-          "must go to UnderConstruction page" in {
+          "must go to CheckYouAnswers page" in {
             navigator.nextPage(DelayDetailsChoicePage, NormalMode, emptyUserAnswers.set(DelayDetailsChoicePage, false)) mustBe
-              testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+              routes.CheckYourAnswersController.onPageLoad(testErn, testArc)
           }
+        }
+      }
+
+      "for the DelayDetailsPage page" - {
+
+        "must go to CheckYourAnswers page" in {
+          navigator.nextPage(DelayDetailsPage, NormalMode, emptyUserAnswers) mustBe
+            routes.CheckYourAnswersController.onPageLoad(testErn, testArc)
+        }
+      }
+
+      "for the CheckYourAnswers page" - {
+
+        //TODO: In future story, update to redirect to the Confirmation page
+        "must go to UnderConstruction page" in {
+          navigator.nextPage(CheckYourAnswersPage, NormalMode, emptyUserAnswers) mustBe
+            testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+        }
+      }
+    }
+
+    "in Check mode" - {
+
+      "DelayReasonPage" - {
+
+        "when the answer is Other" - {
+
+          "must go to the CheckYouAnswers page for any page" in {
+
+            navigator.nextPage(DelayReasonPage, CheckMode, emptyUserAnswers.set(DelayReasonPage, Other)) mustBe
+              routes.DelayDetailsController.onPageLoad(testErn, testArc, CheckMode)
+          }
+        }
+
+        "when the answer is NOT Other" - {
+
+          "must go to the CheckYouAnswers page for any page" in {
+
+            navigator.nextPage(DelayReasonPage, CheckMode, emptyUserAnswers.set(DelayReasonPage, Strikes)) mustBe
+              routes.CheckYourAnswersController.onPageLoad(testErn, testArc)
+          }
+        }
+      }
+
+      "Other Pages" - {
+
+        "must go to the CheckYouAnswers page for any page" in {
+
+          navigator.nextPage(DelayTypePage, CheckMode, emptyUserAnswers) mustBe
+            routes.CheckYourAnswersController.onPageLoad(testErn, testArc)
         }
       }
     }
