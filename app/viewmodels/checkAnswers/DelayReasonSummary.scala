@@ -28,7 +28,7 @@ import viewmodels.implicits._
 
 object DelayReasonSummary  {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+  def row(showActionLinks: Boolean)(implicit answers: UserAnswers, messages: Messages): Option[SummaryListRow] =
     answers.get(DelayReasonPage).map {
       answer =>
 
@@ -41,7 +41,7 @@ object DelayReasonSummary  {
         SummaryListRowViewModel(
           key     = "delayReason.checkYourAnswersLabel",
           value   = value,
-          actions = Seq(
+          actions = if(!showActionLinks) Seq() else Seq(
             ActionItemViewModel("site.change", routes.DelayReasonController.onPageLoad(answers.ern, answers.arc, CheckMode).url, DelayReasonPage)
               .withVisuallyHiddenText(messages("delayReason.change.hidden"))
           )

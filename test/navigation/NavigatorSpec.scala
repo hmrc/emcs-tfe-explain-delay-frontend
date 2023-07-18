@@ -93,10 +93,9 @@ class NavigatorSpec extends SpecBase {
 
       "for the CheckYourAnswers page" - {
 
-        //TODO: In future story, update to redirect to the Confirmation page
-        "must go to UnderConstruction page" in {
+        "must go to Confirmation page" in {
           navigator.nextPage(CheckYourAnswersPage, NormalMode, emptyUserAnswers) mustBe
-            testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+            routes.ConfirmationController.onPageLoad(testErn, testArc)
         }
       }
     }

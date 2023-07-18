@@ -44,26 +44,43 @@ class DelayReasonSummarySpec extends SpecBase with Matchers {
 
           "must output the expected data" in {
 
-            DelayReasonSummary.row(emptyUserAnswers) mustBe None
+            DelayReasonSummary.row(showActionLinks = true)(emptyUserAnswers, msgs) mustBe None
           }
         }
         "when there's an answer" - {
 
-          "must output the expected row" in {
+          "when showActionLinks boolean is true" - {
 
-            DelayReasonSummary.row(emptyUserAnswers.set(DelayReasonPage, Strikes)) mustBe Some(
-              SummaryListRowViewModel(
-                key = messagesForLanguage.cyaLabel,
-                value = Value(HtmlContent(messagesForLanguage.radioStrikes)),
-                actions = Seq(
-                  ActionItemViewModel(
-                    content = messagesForLanguage.change,
-                    href = controllers.routes.DelayReasonController.onPageLoad(testErn, testArc, CheckMode).url,
-                    id = DelayReasonPage
-                  ).withVisuallyHiddenText(messagesForLanguage.cyaChangeHidden)
+            "must output the expected row" in {
+
+              DelayReasonSummary.row(showActionLinks = true)(emptyUserAnswers.set(DelayReasonPage, Strikes), msgs) mustBe Some(
+                SummaryListRowViewModel(
+                  key = messagesForLanguage.cyaLabel,
+                  value = Value(HtmlContent(messagesForLanguage.radioStrikes)),
+                  actions = Seq(
+                    ActionItemViewModel(
+                      content = messagesForLanguage.change,
+                      href = controllers.routes.DelayReasonController.onPageLoad(testErn, testArc, CheckMode).url,
+                      id = DelayReasonPage
+                    ).withVisuallyHiddenText(messagesForLanguage.cyaChangeHidden)
+                  )
                 )
               )
-            )
+            }
+          }
+
+          "when showActionLinks boolean is false" - {
+
+            "must output the expected row without action links" in {
+
+              DelayReasonSummary.row(showActionLinks = false)(emptyUserAnswers.set(DelayReasonPage, Strikes), msgs) mustBe Some(
+                SummaryListRowViewModel(
+                  key = messagesForLanguage.cyaLabel,
+                  value = Value(HtmlContent(messagesForLanguage.radioStrikes)),
+                  actions = Seq()
+                )
+              )
+            }
           }
         }
       }

@@ -44,26 +44,43 @@ class DelayTypeSummarySpec extends SpecBase with Matchers {
 
           "must output the expected data" in {
 
-            DelayTypeSummary.row(emptyUserAnswers) mustBe None
+            DelayTypeSummary.row(showActionLinks = true)(emptyUserAnswers, msgs) mustBe None
           }
         }
         "when there's an answer" - {
 
-          "must output the expected row" in {
+          "when the show action link boolean is true" - {
 
-            DelayTypeSummary.row(emptyUserAnswers.set(DelayTypePage, ReportOfReceipt)) mustBe Some(
-              SummaryListRowViewModel(
-                key = messagesForLanguage.cyaLabel,
-                value = Value(HtmlContent(messagesForLanguage.radioOption1)),
-                actions = Seq(
-                  ActionItemViewModel(
-                    content = messagesForLanguage.change,
-                    href = controllers.routes.DelayTypeController.onPageLoad(testErn, testArc, CheckMode).url,
-                    id = DelayTypePage
-                  ).withVisuallyHiddenText(messagesForLanguage.cyaChangeHidden)
+            "must output the expected row" in {
+
+              DelayTypeSummary.row(showActionLinks = true)(emptyUserAnswers.set(DelayTypePage, ReportOfReceipt), msgs) mustBe Some(
+                SummaryListRowViewModel(
+                  key = messagesForLanguage.cyaLabel,
+                  value = Value(HtmlContent(messagesForLanguage.radioOption1)),
+                  actions = Seq(
+                    ActionItemViewModel(
+                      content = messagesForLanguage.change,
+                      href = controllers.routes.DelayTypeController.onPageLoad(testErn, testArc, CheckMode).url,
+                      id = DelayTypePage
+                    ).withVisuallyHiddenText(messagesForLanguage.cyaChangeHidden)
+                  )
                 )
               )
-            )
+            }
+          }
+
+          "when the show action link boolean is false" - {
+
+            "must output the expected row without action links" in {
+
+              DelayTypeSummary.row(showActionLinks = false)(emptyUserAnswers.set(DelayTypePage, ReportOfReceipt), msgs) mustBe Some(
+                SummaryListRowViewModel(
+                  key = messagesForLanguage.cyaLabel,
+                  value = Value(HtmlContent(messagesForLanguage.radioOption1)),
+                  actions = Seq()
+                )
+              )
+            }
           }
         }
       }

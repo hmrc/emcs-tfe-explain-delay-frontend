@@ -28,8 +28,6 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserAnswersService
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
-import viewmodels.checkAnswers.{DelayDetailsSummary, DelayReasonSummary, DelayTypeSummary}
 import views.html.CheckYourAnswersView
 
 import scala.concurrent.Future
@@ -40,7 +38,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
     .set(DelayTypePage, ReportOfReceipt)
     .set(DelayReasonPage, Strikes)
   )) {
-
     val application = applicationBuilder(userAnswers)
       .overrides(
         bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
@@ -49,7 +46,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
       .build()
 
     lazy val view = application.injector.instanceOf[CheckYourAnswersView]
-    lazy val delayDetailsSummary = application.injector.instanceOf[DelayDetailsSummary]
     implicit lazy val msgs = messages(application)
   }
 
@@ -76,15 +72,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
             val result = route(application, getRequest).value
             implicit val _dataRequest = dataRequest(getRequest, userAnswers.get)
 
-            val summaryListRows = Seq(
-              DelayTypeSummary.row(userAnswers.get),
-              DelayReasonSummary.row(userAnswers.get),
-              Some(delayDetailsSummary.row(userAnswers.get))
-            ).flatten
-
             status(result) mustEqual OK
-            contentAsString(result) mustEqual view(SummaryList(summaryListRows), checkAnswersSubmitAction).toString
-          }
+        contentAsString(result) mustEqual view(checkAnswersSubmitAction).toString}
         }
       }
 

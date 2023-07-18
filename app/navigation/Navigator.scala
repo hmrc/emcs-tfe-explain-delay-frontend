@@ -45,9 +45,8 @@ class Navigator @Inject()() extends BaseNavigator {
       }
     case DelayDetailsPage => (userAnswers: UserAnswers) =>
       routes.CheckYourAnswersController.onPageLoad(userAnswers.ern, userAnswers.arc)
-    case CheckYourAnswersPage => (_: UserAnswers) =>
-      //TODO: Redirect to the Confirmation page as part of future story
-      testOnly.controllers.routes.UnderConstructionController.onPageLoad()
+    case CheckYourAnswersPage => (userAnswers: UserAnswers) =>
+      routes.ConfirmationController.onPageLoad(userAnswers.ern, userAnswers.arc)
     case _ => (userAnswers: UserAnswers) =>
       routes.IndexController.onPageLoad(userAnswers.ern, userAnswers.arc)
   }
@@ -66,9 +65,8 @@ class Navigator @Inject()() extends BaseNavigator {
     }
   }
 
-
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode => normalRoutes(page)(userAnswers)
-    case CheckMode => checkRoutes(page)(userAnswers)
+    case _ => checkRoutes(page)(userAnswers)
   }
 }

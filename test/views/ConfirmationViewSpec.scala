@@ -17,39 +17,46 @@
 package views
 
 import base.ViewSpecBase
-import fixtures.messages.CheckYourAnswersMessages
+import fixtures.messages.ConfirmationMessages
+import models.ConfirmationDetails
 import models.requests.DataRequest
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryList
-import views.html.CheckYourAnswersView
+import views.html.ConfirmationView
 
-class CheckYourAnswersViewSpec extends ViewSpecBase with ViewBehaviours {
+class ConfirmationViewSpec extends ViewSpecBase with ViewBehaviours {
 
   object Selectors extends BaseSelectors
 
-  lazy val view = app.injector.instanceOf[CheckYourAnswersView]
+  lazy val view = app.injector.instanceOf[ConfirmationView]
 
-  "CheckYourAnswersView" - {
+  "ConfirmationView" - {
 
-    Seq(CheckYourAnswersMessages.English, CheckYourAnswersMessages.Welsh).foreach { messagesForLanguage =>
+    Seq(ConfirmationMessages.English, ConfirmationMessages.Welsh).foreach { messagesForLanguage =>
 
       s"when being rendered in lang code of '${messagesForLanguage.lang.code}'" - {
 
         implicit lazy val msgs: Messages = messages(app, messagesForLanguage.lang)
         implicit lazy val request: DataRequest[AnyContentAsEmpty.type] = dataRequest(FakeRequest(), emptyUserAnswers)
 
-        implicit val doc: Document = Jsoup.parse(view(testOnwardRoute).toString())
+        implicit val doc: Document = Jsoup.parse(view(ConfirmationDetails(testConfirmationReference)).toString())
 
         behave like pageWithExpectedElementsAndMessages(Seq(
           Selectors.title -> messagesForLanguage.title,
           Selectors.h1 -> messagesForLanguage.heading,
-          Selectors.h2(2) -> messagesForLanguage.h2,
-          Selectors.p(1) -> messagesForLanguage.p1,
-          Selectors.button -> messagesForLanguage.submit
+          Selectors.h2(1) -> messagesForLanguage.delayInformationH2,
+          Selectors.p(1) -> messagesForLanguage.submissionReference(testConfirmationReference),
+          Selectors.p(2) -> messagesForLanguage.print,
+          Selectors.h2(2) -> messagesForLanguage.whatNextH2,
+          Selectors.p(3) -> messagesForLanguage.whatNextP1,
+          Selectors.h2(3) -> messagesForLanguage.mayNeedToDoH2,
+          Selectors.p(4) -> messagesForLanguage.mayNeedToDoP1,
+          Selectors.p(5) -> messagesForLanguage.mayNeedToDoP2,
+          Selectors.button -> messagesForLanguage.atAGlanceLink,
+          Selectors.p(6) -> messagesForLanguage.feedback
         ))
       }
     }
