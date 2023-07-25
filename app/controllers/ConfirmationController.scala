@@ -17,8 +17,6 @@
 package controllers
 
 import controllers.actions._
-import handlers.ErrorHandler
-import models.ConfirmationDetails
 import navigation.Navigator
 import pages.ConfirmationPage
 import play.api.i18n.MessagesApi
@@ -27,6 +25,7 @@ import services.UserAnswersService
 import views.html.ConfirmationView
 
 import javax.inject.Inject
+import scala.concurrent.Future
 
 class ConfirmationController @Inject()(
                                         override val messagesApi: MessagesApi,
@@ -38,19 +37,14 @@ class ConfirmationController @Inject()(
                                         override val requireData: DataRequiredAction,
                                         override val userAllowList: UserAllowListAction,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: ConfirmationView,
-                                        errorHandler: ErrorHandler
+                                        view: ConfirmationView
                                       ) extends BaseNavigationController with AuthActionHelper {
 
   def onPageLoad(ern: String, arc: String): Action[AnyContent] =
-    authorisedDataRequestWithCachedMovement(ern, arc) { implicit request =>
-      request.userAnswers.get(ConfirmationPage) match {
-        case Some(confirmationDetails: ConfirmationDetails) =>
-          logger.info("[onPageLoad] Successful Explain Delay confirmation page displayed")
-          Ok(view(confirmationDetails))
-        case None =>
-          logger.warn("[onPageLoad] Could not retrieve submission confirmation details from User session")
-          Redirect(routes.JourneyRecoveryController.onPageLoad(ern, arc))
+    authorisedDataRequestWithCachedMovementAsync(ern, arc) { implicit request =>
+      withAnswer(ConfirmationPage) { confirmationDetails =>
+        logger.info("[onPageLoad] Successful Explain Delay confirmation page displayed")
+        Future.successful(Ok(view(confirmationDetails)))
       }
     }
 
