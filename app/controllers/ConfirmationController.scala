@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions._
 import navigation.Navigator
-import pages.CheckYourAnswersPage
+import pages.ConfirmationPage
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserAnswersService
@@ -42,8 +42,10 @@ class ConfirmationController @Inject()(
 
   def onPageLoad(ern: String, arc: String): Action[AnyContent] =
     authorisedDataRequestWithCachedMovementAsync(ern, arc) { implicit request =>
-      withAnswer(CheckYourAnswersPage) { confirmationDetails =>
+      withAnswer(ConfirmationPage) { confirmationDetails =>
+        logger.info("[onPageLoad] Successful Explain Delay confirmation page displayed")
         Future.successful(Ok(view(confirmationDetails)))
       }
     }
+
 }

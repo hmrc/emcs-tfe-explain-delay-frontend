@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package models.submitExplainDelay
 
-import play.api.libs.json.{Json, OFormat}
+import models.{Enumerable, WithName}
 
-case class ConfirmationDetails(
-                                receipt: String,
-                                delayType: DelayType,
-                                delayReason: DelayReason,
-                                delayDetails: Option[String]
-                              )
+sealed trait SubmitterType
 
-object ConfirmationDetails {
-  implicit def format: OFormat[ConfirmationDetails] = Json.format[ConfirmationDetails]
+object SubmitterType extends Enumerable.Implicits {
+
+  case object Consignor extends WithName("1") with SubmitterType
+
+  case object Consignee extends WithName("2") with SubmitterType
+
+  val values: Seq[SubmitterType] = Seq(Consignor, Consignee)
+
+  implicit val enumerable: Enumerable[SubmitterType] =
+    Enumerable(values.map(v => v.toString -> v): _*)
 }

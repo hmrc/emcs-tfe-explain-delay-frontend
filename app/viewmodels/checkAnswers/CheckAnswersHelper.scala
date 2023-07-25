@@ -16,7 +16,9 @@
 
 package viewmodels.checkAnswers
 
-import models.UserAnswers
+import models.requests.DataRequest
+import models.{ConfirmationDetails, UserAnswers}
+import pages.{DelayDetailsPage, DelayReasonPage, DelayTypePage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
 
@@ -32,4 +34,20 @@ class CheckAnswersHelper @Inject()(delayDetailsSummary: DelayDetailsSummary) {
         delayDetailsSummary.row(showActionLinks)
       ).flatten
     )
+
+  def summaryList(confirmationDetails: ConfirmationDetails)(implicit request: DataRequest[_], messages: Messages): SummaryList = {
+
+    val userAnswersFromConfirmationDetails = UserAnswers(
+      internalId = request.internalId,
+      ern = request.ern,
+      arc = request.arc
+    )
+      .set(DelayTypePage, confirmationDetails.delayType)
+      .set(DelayReasonPage, confirmationDetails.delayReason)
+      .set(DelayDetailsPage, confirmationDetails.delayDetails)
+
+    summaryList(showActionLinks = false)(userAnswersFromConfirmationDetails, messages)
+
+  }
+
 }

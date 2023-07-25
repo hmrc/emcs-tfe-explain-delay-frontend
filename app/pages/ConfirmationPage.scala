@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.{Json, OFormat}
+import models.ConfirmationDetails
+import play.api.libs.json.JsPath
 
-case class ConfirmationDetails(
-                                receipt: String,
-                                delayType: DelayType,
-                                delayReason: DelayReason,
-                                delayDetails: Option[String]
-                              )
+case object ConfirmationPage extends QuestionPage[ConfirmationDetails] {
 
-object ConfirmationDetails {
-  implicit def format: OFormat[ConfirmationDetails] = Json.format[ConfirmationDetails]
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "confirmationDetails"
 }

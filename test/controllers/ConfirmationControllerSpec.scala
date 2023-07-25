@@ -20,7 +20,7 @@ import base.SpecBase
 import models.DelayReason.Strikes
 import models.DelayType.ReportOfReceipt
 import models.{ConfirmationDetails, UserAnswers}
-import pages.{CheckYourAnswersPage, DelayReasonPage, DelayTypePage}
+import pages.{ConfirmationPage, DelayReasonPage, DelayTypePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.ConfirmationView
@@ -30,7 +30,12 @@ class ConfirmationControllerSpec extends SpecBase {
   class Fixture(val userAnswers: Option[UserAnswers] = Some(emptyUserAnswers
     .set(DelayTypePage, ReportOfReceipt)
     .set(DelayReasonPage, Strikes)
-    .set(CheckYourAnswersPage, ConfirmationDetails(testConfirmationReference))
+    .set(ConfirmationPage, ConfirmationDetails(
+      receipt = testConfirmationReference,
+      delayType = ReportOfReceipt,
+      delayReason = Strikes,
+      delayDetails = None
+    ))
   )) {
     val application = applicationBuilder(userAnswers).build()
     val view = application.injector.instanceOf[ConfirmationView]
@@ -51,7 +56,14 @@ class ConfirmationControllerSpec extends SpecBase {
           val result = route(application, getRequest).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(ConfirmationDetails(testConfirmationReference)).toString
+          contentAsString(result) mustEqual view(
+            ConfirmationDetails(
+              receipt = testConfirmationReference,
+              delayType = ReportOfReceipt,
+              delayReason = Strikes,
+              delayDetails = None
+            )
+          ).toString
         }
       }
     }

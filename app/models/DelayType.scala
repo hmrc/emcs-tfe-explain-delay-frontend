@@ -24,8 +24,8 @@ sealed trait DelayType
 
 object DelayType extends Enumerable.Implicits {
 
-  case object ReportOfReceipt extends WithName("reportOfReceipt") with DelayType
-  case object ConsigneeOrChangeOfDestination extends WithName("consigneeOrChangeOfDestination") with DelayType
+  case object ReportOfReceipt extends WithName("1") with DelayType
+  case object ConsigneeOrChangeOfDestination extends WithName("2") with DelayType
 
   val values: Seq[DelayType] = Seq(
     ReportOfReceipt, ConsigneeOrChangeOfDestination

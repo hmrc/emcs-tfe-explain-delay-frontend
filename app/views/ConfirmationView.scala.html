@@ -39,12 +39,12 @@
 
     @h2("confirmation.delayInformation.h2")
 
-    @govukSummaryList(checkAnswersHelper.summaryList(showActionLinks = false)(request.userAnswers, messages))
+    @govukSummaryList(checkAnswersHelper.summaryList(confirmationDetails)(request, messages))
 
     @p() {
         @messages("confirmation.reference")
         @strong {
-            @{confirmationDetails.reference}
+            @{confirmationDetails.receipt}
         }
     }
 

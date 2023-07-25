@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package models.audit
 
-import play.api.libs.json.{Json, OFormat}
+import base.SpecBase
+import fixtures.audit.SubmitExplainDelayAuditModelFixture._
 
-case class ConfirmationDetails(
-                                receipt: String,
-                                delayType: DelayType,
-                                delayReason: DelayReason,
-                                delayDetails: Option[String]
-                              )
+class SubmitExplainDelayAuditModelSpec extends SpecBase {
 
-object ConfirmationDetails {
-  implicit def format: OFormat[ConfirmationDetails] = Json.format[ConfirmationDetails]
+  "SubmitReportOfReceiptAuditModel" - {
+
+    "should write a correct audit json" in {
+      submitEADAuditModel.detail mustBe submitEADAuditModelJson
+    }
+
+  }
+
 }
