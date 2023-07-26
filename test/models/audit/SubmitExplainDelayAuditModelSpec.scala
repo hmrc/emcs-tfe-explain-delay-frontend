@@ -19,12 +19,20 @@ package models.audit
 import base.SpecBase
 import fixtures.audit.SubmitExplainDelayAuditModelFixture._
 
-class SubmitExplainDelayAuditModelSpec extends SpecBase {
+class SubmitExplainDelayAuditSpec extends SpecBase {
 
   "SubmitReportOfReceiptAuditModel" - {
 
-    "should write a correct audit json" in {
-      submitEADAuditModel.detail mustBe submitEADAuditModelJson
+    "should write a correct audit json" - {
+
+      "when a successful submission has occurred" in {
+        submitExplainDelayAuditSuccessful.detail mustBe submitExplainDelayAuditSuccessfulJSON
+      }
+
+      "when a failed to submit has occurred" in {
+        submitExplainDelayAuditFailed.detail mustBe submitExplainDelayAuditFailedJSON
+      }
+
     }
 
   }

@@ -34,15 +34,14 @@ package services
 
 
 import connectors.emcsTfe.SubmitExplainDelayConnector
-import models.SubmitExplainDelayException
-import models.audit.{SubmitExplainDelayAuditModel, SubmitExplainDelayResponseAuditModel}
+import models.audit.SubmitExplainDelayAudit
 import models.requests.DataRequest
 import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.SubmitExplainDelayModel
+import models.{ErrorResponse, SubmitExplainDelayException}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 
-import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -52,39 +51,38 @@ class SubmitExplainDelayService @Inject()(submitExplainDelayConnector: SubmitExp
 
   def submit(ern: String, arc: String)(implicit hc: HeaderCarrier, dataRequest: DataRequest[_]): Future[SubmitExplainDelayResponse] = {
 
-    val submission = SubmitExplainDelayModel(dataRequest.movementDetails)(dataRequest.userAnswers)
+    val submissionRequest = SubmitExplainDelayModel(dataRequest.movementDetails)(dataRequest.userAnswers)
 
-    val auditCorrelationId = UUID.randomUUID().toString
-
-    auditingService.audit(
-      SubmitExplainDelayAuditModel(
-        credentialId = dataRequest.request.request.credId,
-        internalId = dataRequest.internalId,
-        correlationId = auditCorrelationId,
-        submission = submission,
-        ern = ern
-      )
-    )
-
-    submitExplainDelayConnector.submit(ern, submission).map {
-      case Right(success) =>
+    submitExplainDelayConnector.submit(ern, submissionRequest).map {
+      case Right(submissionResponse) =>
         logger.info("[submit] Successful explain a delay submission")
 
-        auditingService.audit(
-          SubmitExplainDelayResponseAuditModel(
-            credentialId = dataRequest.request.request.credId,
-            internalId = dataRequest.internalId,
-            correlationId = auditCorrelationId,
-            arc = dataRequest.arc,
-            traderId = ern,
-            receipt = success.receipt
-          )
-        )
-        success
-      case Left(_) =>
+        writeAudit(submissionRequest, Right(submissionResponse))
+
+        submissionResponse
+      case Left(errorResponse) =>
         logger.warn("[submit] Unsuccessful explain a delay submission")
+
+        writeAudit(submissionRequest, Left(errorResponse))
 
         throw SubmitExplainDelayException(s"Failed to submit Explain a Delay to emcs-tfe for ern: '$ern' & arc: '$arc'")
     }
   }
+
+  private def writeAudit(
+                          submissionRequest: SubmitExplainDelayModel,
+                          submissionResponse: Either[ErrorResponse, SubmitExplainDelayResponse]
+                        )(implicit hc: HeaderCarrier, dataRequest: DataRequest[_]): Unit = {
+
+    auditingService.audit(
+      SubmitExplainDelayAudit(
+        credentialId = dataRequest.request.request.credId,
+        internalId = dataRequest.internalId,
+        ern = dataRequest.ern,
+        submissionRequest = submissionRequest,
+        submissionResponse = submissionResponse
+      )
+    )
+  }
+
 }

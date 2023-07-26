@@ -16,9 +16,10 @@
 
 package fixtures.audit
 
-import models.audit.SubmitExplainDelayAuditModel
+import models.audit.SubmitExplainDelayAudit
+import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.{SubmitExplainDelayModel, SubmitterType}
-import models.{DelayReason, DelayType}
+import models.{DelayReason, DelayType, UnexpectedDownstreamResponseError}
 import play.api.libs.json.{JsValue, Json}
 
 import java.time.LocalDate
@@ -26,38 +27,83 @@ import java.time.LocalDate
 object SubmitExplainDelayAuditModelFixture {
   val time = LocalDate.now().toString
 
-  val submitEADAuditModel: SubmitExplainDelayAuditModel =
-    SubmitExplainDelayAuditModel(
-      credentialId = "credentialId",
-      internalId = "internalId",
-      correlationId = "correlationId",
-      submission = SubmitExplainDelayModel(
-        arc = "ARC",
-        submitterType = SubmitterType.Consignor,
-        sequenceNumber = 1,
-        delayType = DelayType.ReportOfReceipt,
-        delayReasonType = DelayReason.Other,
-        additionalInformation = Some("more information")
-      ),
-      ern = "ERN"
+  val submitExplainDelayAuditSuccessful: SubmitExplainDelayAudit = SubmitExplainDelayAudit(
+    credentialId = "credentialId",
+    internalId = "internalId",
+    ern = "ERN1",
+    submissionRequest = SubmitExplainDelayModel(
+      arc = "ARC1",
+      sequenceNumber = 1,
+      submitterType = SubmitterType.Consignor,
+      delayType = DelayType.ReportOfReceipt,
+      delayReasonType = DelayReason.Other,
+      additionalInformation = Some("more information")
+    ),
+    submissionResponse = Right(
+      SubmitExplainDelayResponse(
+        receipt = "1234567890",
+        receiptDate = s"$time"
+      )
     )
+  )
 
-  val submitEADAuditModelJson: JsValue = Json.parse(
+
+  val submitExplainDelayAuditSuccessfulJSON: JsValue = Json.parse(
     s"""
        |{
        |   "credentialId": "credentialId",
        |   "internalId": "internalId",
-       |	 "correlationId": "correlationId",
-       |   "submission": {
-       |       "arc": "ARC",
+       |   "ern": "ERN1",
+       |   "submissionRequest": {
+       |       "arc": "ARC1",
        |       "sequenceNumber": 1,
+       |       "submitterType": "${SubmitterType.Consignor.toString}",
        |       "delayType": "${DelayType.ReportOfReceipt.toString}",
        |       "delayReasonType": "${DelayReason.Other.toString}",
        |       "additionalInformation": "more information"
        |   },
-       |   "ern": "ERN"
+       |   "submissionResponse" : {
+       |      "success": {
+       |          "receipt": "1234567890",
+       |          "receiptDate": "$time"
+       |      }
+       |   }
        |}
        |""".stripMargin)
 
 
+  val submitExplainDelayAuditFailed: SubmitExplainDelayAudit = SubmitExplainDelayAudit(
+    credentialId = "credentialId",
+    internalId = "internalId",
+    ern = "ERN1",
+    submissionRequest = SubmitExplainDelayModel(
+      arc = "ARC1",
+      sequenceNumber = 1,
+      submitterType = SubmitterType.Consignor,
+      delayType = DelayType.ReportOfReceipt,
+      delayReasonType = DelayReason.Other,
+      additionalInformation = Some("more information")
+    ),
+    submissionResponse = Left(UnexpectedDownstreamResponseError)
+  )
+
+  val submitExplainDelayAuditFailedJSON: JsValue = Json.parse(
+    s"""
+       |{
+       |   "credentialId": "credentialId",
+       |   "internalId": "internalId",
+       |   "ern": "ERN1",
+       |   "submissionRequest": {
+       |       "arc": "ARC1",
+       |       "sequenceNumber": 1,
+       |       "submitterType": "${SubmitterType.Consignor.toString}",
+       |       "delayType": "${DelayType.ReportOfReceipt.toString}",
+       |       "delayReasonType": "${DelayReason.Other.toString}",
+       |       "additionalInformation": "more information"
+       |   },
+       |   "submissionResponse" : {
+       |      "failure": "Unexpected downstream response status"
+       |   }
+       |}
+       |""".stripMargin)
 }
