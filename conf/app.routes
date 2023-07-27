@@ -39,7 +39,7 @@ POST       /trader/:ern/movement/:arc/delay-details                     controll
 GET        /trader/:ern/movement/:arc/delay-details/change              controllers.DelayDetailsController.onPageLoad(ern: String, arc: String, mode: Mode = CheckMode)
 POST       /trader/:ern/movement/:arc/delay-details/change              controllers.DelayDetailsController.onSubmit(ern: String, arc: String, mode: Mode = CheckMode)
 
-GET        /trader/:ern/movement/:arc/check-answers-delay               controllers.CheckYourAnswersController.onPageLoad(ern: String, arc: String)
-POST       /trader/:ern/movement/:arc/check-answers-delay               controllers.CheckYourAnswersController.onSubmit(ern: String, arc: String)
+GET        /trader/:ern/movement/:arc/check-answers                     controllers.CheckYourAnswersController.onPageLoad(ern: String, arc: String)
+POST       /trader/:ern/movement/:arc/check-answers                     controllers.CheckYourAnswersController.onSubmit(ern: String, arc: String)
 
 GET        /trader/:ern/movement/:arc/confirmation                      controllers.ConfirmationController.onPageLoad(ern: String, arc: String)
