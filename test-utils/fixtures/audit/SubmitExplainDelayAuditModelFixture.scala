@@ -54,20 +54,15 @@ object SubmitExplainDelayAuditModelFixture {
        |   "credentialId": "credentialId",
        |   "internalId": "internalId",
        |   "ern": "ERN1",
-       |   "submissionRequest": {
-       |       "arc": "ARC1",
-       |       "sequenceNumber": 1,
-       |       "submitterType": "${SubmitterType.Consignor.toString}",
-       |       "delayType": "${DelayType.ReportOfReceipt.toString}",
-       |       "delayReasonType": "${DelayReason.Other.toString}",
-       |       "additionalInformation": "more information"
-       |   },
-       |   "submissionResponse" : {
-       |      "success": {
-       |          "receipt": "1234567890",
-       |          "receiptDate": "$time"
-       |      }
-       |   }
+       |   "arc": "ARC1",
+       |   "sequenceNumber": 1,
+       |   "submitterType": "${SubmitterType.Consignor.toString}",
+       |   "delayType": "${DelayType.ReportOfReceipt.toString}",
+       |   "delayReasonType": "${DelayReason.Other.toString}",
+       |   "additionalInformation": "more information",
+       |   "status": "success",
+       |   "receipt": "1234567890",
+       |   "receiptDate": "$time"
        |}
        |""".stripMargin)
 
@@ -93,17 +88,14 @@ object SubmitExplainDelayAuditModelFixture {
        |   "credentialId": "credentialId",
        |   "internalId": "internalId",
        |   "ern": "ERN1",
-       |   "submissionRequest": {
-       |       "arc": "ARC1",
-       |       "sequenceNumber": 1,
-       |       "submitterType": "${SubmitterType.Consignor.toString}",
-       |       "delayType": "${DelayType.ReportOfReceipt.toString}",
-       |       "delayReasonType": "${DelayReason.Other.toString}",
-       |       "additionalInformation": "more information"
-       |   },
-       |   "submissionResponse" : {
-       |      "failure": "Unexpected downstream response status"
-       |   }
+       |   "arc": "ARC1",
+       |   "sequenceNumber": 1,
+       |   "submitterType": "${SubmitterType.Consignor.toString}",
+       |   "delayType": "${DelayType.ReportOfReceipt.toString}",
+       |   "delayReasonType": "${DelayReason.Other.toString}",
+       |   "additionalInformation": "more information",
+       |   "status": "failed",
+       |   "failedMessage": "Unexpected downstream response status"
        |}
        |""".stripMargin)
 }

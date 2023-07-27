@@ -35,12 +35,25 @@ case class SubmitExplainDelayAudit(
     "credentialId" -> credentialId,
     "internalId" -> internalId,
     "ern" -> ern,
-    "submissionRequest" -> submissionRequest,
-    "submissionResponse" -> {
-      submissionResponse match {
-        case Right(x) => Json.obj("success" -> Json.toJson(x))
-        case Left(x) => Json.obj("failure" -> Json.toJson(x.message))
-      }
+    "arc" -> submissionRequest.arc,
+    "sequenceNumber" -> submissionRequest.sequenceNumber,
+    "submitterType" -> submissionRequest.submitterType,
+    "delayType" -> submissionRequest.delayType,
+    "delayReasonType" -> submissionRequest.delayReasonType,
+    "additionalInformation" -> submissionRequest.additionalInformation
+  ) ++ {
+    submissionResponse match {
+      case Right(success) =>
+        Json.obj(fields =
+          "status" -> "success",
+          "receipt" -> success.receipt,
+          "receiptDate" -> success.receiptDate
+        )
+      case Left(failedMessage) =>
+        Json.obj(fields =
+          "status" -> "failed",
+          "failedMessage" -> failedMessage.message
+        )
     }
-  )
+  }
 }
