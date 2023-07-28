@@ -17,9 +17,9 @@
 package connectors.emcsTfe
 
 import config.AppConfig
-import models.ErrorResponse
 import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.SubmitExplainDelayModel
+import models.{ErrorResponse, UnexpectedDownstreamResponseError}
 import play.api.libs.json.Reads
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
@@ -35,6 +35,13 @@ class SubmitExplainDelayConnector @Inject()(val http: HttpClient,
   lazy val baseUrl: String = config.emcsTfeBaseUrl
 
   def submit(exciseRegistrationNumber: String, submitExplainDelayModel: SubmitExplainDelayModel)
-            (implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[ErrorResponse, SubmitExplainDelayResponse]] =
+            (implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[ErrorResponse, SubmitExplainDelayResponse]] = {
     post(s"$baseUrl/explain-delay/$exciseRegistrationNumber/${submitExplainDelayModel.arc}", submitExplainDelayModel)
+
+  }.recover {
+    ex =>
+      logger.warn(s"[submit] Unexpected response from emcs-tfe : ${ex.getMessage}")
+      Left(UnexpectedDownstreamResponseError)
+  }
+
 }

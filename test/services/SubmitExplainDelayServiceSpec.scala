@@ -20,7 +20,7 @@ import base.SpecBase
 import fixtures.SubmitExplainDelayFixtures
 import mocks.connectors.MockSubmitExplainDelayConnector
 import mocks.services.MockAuditingService
-import models.audit.{SubmitExplainDelayAuditModel, SubmitExplainDelayResponseAuditModel}
+import models.audit.SubmitExplainDelayAudit
 import models.submitExplainDelay.SubmitExplainDelayModel
 import models.{DelayReason, DelayType, SubmitExplainDelayException, UnexpectedDownstreamResponseError}
 import pages.{DelayDetailsPage, DelayReasonPage, DelayTypePage}
@@ -39,9 +39,9 @@ class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelay
 
   ".submit(ern: String, submission: SubmitExplainDelayModel)" - {
 
-    "should return Success response" - {
+    "should submit, audit and return a success response" - {
 
-      "when Connector returns success from downstream" in {
+      "when connector receives a success from downstream" in {
 
         val userAnswers = emptyUserAnswers
           .set(DelayTypePage, DelayType.ReportOfReceipt)
@@ -52,21 +52,25 @@ class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelay
 
         val submission = SubmitExplainDelayModel(getMovementResponseModel)(userAnswers)
 
-        MockAuditingService.verifyAudit(SubmitExplainDelayAuditModel("credId", "internalId", "correlationId", submission, "ern")).noMoreThanOnce()
-
-        MockAuditingService.verifyAudit(
-          SubmitExplainDelayResponseAuditModel("credId", "internalId", "correlationId", "arc", "ern", successResponse.receipt)
-        ).noMoreThanOnce()
-
         MockSubmitExplainDelayConnector.submit(testErn, submission).returns(Future.successful(Right(successResponse)))
+
+        MockAuditingService.audit(
+          SubmitExplainDelayAudit(
+            "credId",
+            "internalId",
+            "ern",
+            submission,
+            Right(successResponse)
+          )
+        ).noMoreThanOnce()
 
         testService.submit(testErn, testArc)(hc, request).futureValue mustBe successResponse
       }
     }
 
-    "should return Failure response" - {
+    "should submit, audit and return a failure response" - {
 
-      "when Connector returns failure from downstream" in {
+      "when connector receives a failure from downstream" in {
 
         val userAnswers = emptyUserAnswers
           .set(DelayTypePage, DelayType.ReportOfReceipt)
@@ -76,9 +80,17 @@ class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelay
         val request = dataRequest(FakeRequest(), userAnswers)
         val submission = SubmitExplainDelayModel(getMovementResponseModel)(userAnswers)
 
-        MockAuditingService.verifyAudit(SubmitExplainDelayAuditModel("credId", "internalId", "correlationId", submission, "ern")).noMoreThanOnce()
-
         MockSubmitExplainDelayConnector.submit(testErn, submission).returns(Future.successful(Left(UnexpectedDownstreamResponseError)))
+
+        MockAuditingService.audit(
+          SubmitExplainDelayAudit(
+            "credId",
+            "internalId",
+            "ern",
+            submission,
+            Left(UnexpectedDownstreamResponseError)
+          )
+        ).noMoreThanOnce()
 
         intercept[SubmitExplainDelayException](await(testService.submit(testErn, testArc)(hc, request))).getMessage mustBe
           s"Failed to submit Explain a Delay to emcs-tfe for ern: '$testErn' & arc: '$testArc'"
