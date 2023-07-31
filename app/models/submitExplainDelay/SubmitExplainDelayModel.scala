@@ -36,7 +36,7 @@ object SubmitExplainDelayModel extends JsonOptionFormatter with ModelConstructor
   def apply(movementDetails: GetMovementResponse)(implicit userAnswers: UserAnswers): SubmitExplainDelayModel = {
 
     val submitter: SubmitterType = {
-      if (movementDetails.consignorTrader.traderExciseNumber == userAnswers.ern) SubmitterType.Consignor else SubmitterType.Consignee
+      if (movementDetails.consignorTrader.traderExciseNumber.contains(userAnswers.ern)) SubmitterType.Consignor else SubmitterType.Consignee
     }
 
     SubmitExplainDelayModel(

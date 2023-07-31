@@ -17,7 +17,8 @@
 package fixtures
 
 import models.DestinationType.TaxWarehouse
-import models.response.emcsTfe.{ConsignorTraderModel, GetMovementResponse}
+import models.common.TraderModel
+import models.response.emcsTfe.GetMovementResponse
 import models.submitExplainDelay.AddressModel
 import play.api.libs.json.{JsValue, Json}
 
@@ -33,15 +34,16 @@ trait GetMovementResponseFixtures { _: BaseFixtures =>
     deliveryPlaceTrader = None,
     localReferenceNumber = "MyLrn",
     eadStatus = "MyEadStatus",
-    consignorTrader = ConsignorTraderModel(
-      traderExciseNumber = "GB12345GTR144",
-      traderName = "MyConsignor",
-      address = AddressModel(
+    consignorTrader = TraderModel(
+      traderExciseNumber = Some("GB12345GTR144"),
+      traderName = Some("MyConsignor"),
+      address = Some(AddressModel(
         streetNumber = None,
         street = Some("Main101"),
         postcode = Some("ZZ78"),
         city = Some("Zeebrugge")
-      )
+      )),
+      eoriNumber = None
     ),
     dateOfDispatch = LocalDate.parse("2010-03-04"),
     journeyTime = "MyJourneyTime",

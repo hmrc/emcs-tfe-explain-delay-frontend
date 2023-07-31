@@ -18,7 +18,7 @@ package models.submitExplainDelay
 
 import base.SpecBase
 import fixtures.GetMovementResponseFixtures
-import models.response.emcsTfe.ConsignorTraderModel
+import models.common.TraderModel
 import models.{DelayReason, DelayType, UserAnswers}
 import pages.{DelayDetailsPage, DelayReasonPage, DelayTypePage}
 
@@ -31,15 +31,16 @@ class SubmitExplainDelayModelSpec extends SpecBase with GetMovementResponseFixtu
     val consigneesERN = "GB000022222222"
 
     val movementResponseModel = getMovementResponseModel.copy(
-      consignorTrader = ConsignorTraderModel(
-        traderExciseNumber = consignorsERN,
-        traderName = "MyConsignor",
-        address = AddressModel(
+      consignorTrader = TraderModel(
+        traderExciseNumber = Some(consignorsERN),
+        traderName = Some("MyConsignor"),
+        address = Some(AddressModel(
           streetNumber = None,
           street = Some("Main101"),
           postcode = Some("ZZ78"),
           city = Some("Zeebrugge")
-        )
+        )),
+        eoriNumber = None
       )
     )
 
