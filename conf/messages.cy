@@ -69,6 +69,15 @@ notOnPrivateBeta.notSignedUp.p1.link = take part in the EMCS private beta resear
 notOnPrivateBeta.notSignedUp.p1.afterLink = if you are not already involved.
 notOnPrivateBeta.notSignedUp.p2 = To take part you must currently submit EMCS receipts using the HMRC platform.
 
+timeout.title = You’re about to be signed out
+timeout.message = For security reasons, you will be signed out of this service in
+timeout.keepAlive = Stay signed in
+timeout.signOut = Sign out
+
+timeout.timedOut.title = For your security we signed you out
+timeout.timedOut.heading = For your security we signed you out
+timeout.timedOut.p1 = We have not saved your answers.
+
 arc.subHeading = Explanation for delay to {0}
 
 error.browser.title.prefix = Error:
