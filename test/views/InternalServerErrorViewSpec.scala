@@ -17,38 +17,38 @@
 package views
 
 import base.ViewSpecBase
-import fixtures.messages.CheckYourAnswersMessages
+import fixtures.messages.InternalServerErrorMessages
 import models.requests.DataRequest
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import views.html.CheckYourAnswersView
+import views.html.InternalServerErrorView
 
-class CheckYourAnswersViewSpec extends ViewSpecBase with ViewBehaviours {
+class InternalServerErrorViewSpec extends ViewSpecBase with ViewBehaviours {
 
   object Selectors extends BaseSelectors
 
-  lazy val view = app.injector.instanceOf[CheckYourAnswersView]
+  "InternalServerError view" - {
 
-  "CheckYourAnswersView" - {
-
-    Seq(CheckYourAnswersMessages.English, CheckYourAnswersMessages.Welsh).foreach { messagesForLanguage =>
+    Seq(InternalServerErrorMessages.English, InternalServerErrorMessages.Welsh).foreach { messagesForLanguage =>
 
       s"when being rendered in lang code of '${messagesForLanguage.lang.code}'" - {
 
-        implicit lazy val msgs: Messages = messages(app, messagesForLanguage.lang)
-        implicit lazy val request: DataRequest[AnyContentAsEmpty.type] = dataRequest(FakeRequest(), emptyUserAnswers)
+        implicit val msgs: Messages = messages(app, messagesForLanguage.lang)
+        implicit val request: DataRequest[AnyContentAsEmpty.type] = dataRequest(FakeRequest())
 
-        implicit val doc: Document = Jsoup.parse(view(testOnwardRoute).toString())
+        val view = app.injector.instanceOf[InternalServerErrorView]
+
+        implicit val doc: Document = Jsoup.parse(view().toString())
 
         behave like pageWithExpectedElementsAndMessages(Seq(
           Selectors.title -> messagesForLanguage.title,
           Selectors.h1 -> messagesForLanguage.heading,
-          Selectors.h2(2) -> messagesForLanguage.h2,
           Selectors.p(1) -> messagesForLanguage.p1,
-          Selectors.button -> messagesForLanguage.submit
+          Selectors.p(2) -> messagesForLanguage.p2,
+          Selectors.p(3) -> messagesForLanguage.p3
         ))
       }
     }
