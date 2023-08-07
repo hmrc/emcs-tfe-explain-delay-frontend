@@ -62,6 +62,8 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, configuration: Configu
 
   lazy val contactEMCSHelpdeskUrl: String = configuration.get[String]("urls.contactEmcsHelpdesk")
 
+  lazy val emcsGeneralEnquiriesUrl: String = configuration.get[String]("urls.emcsGeneralEnquiries")
+
   def loginContinueUrl(ern: String, arc: String): String = configuration.get[String]("urls.loginContinue") + s"/$ern/$arc"
 
   def languageTranslationEnabled: Boolean = isEnabled(WelshLanguage)

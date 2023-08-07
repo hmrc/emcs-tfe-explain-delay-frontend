@@ -17,39 +17,42 @@
 package views
 
 import base.ViewSpecBase
-import fixtures.messages.IndexMessages
+import fixtures.messages._
 import models.requests.DataRequest
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import views.html.IndexPage
+import views.html.NotPermittedView
 
-class IndexPageSpec extends ViewSpecBase with ViewBehaviours {
+class NotPermittedViewSpec extends ViewSpecBase with ViewBehaviours {
 
   object Selectors extends BaseSelectors
 
-  "IndexView" - {
+  "NotPermitted view" - {
 
-    Seq(IndexMessages.English, IndexMessages.Welsh).foreach { messagesForLanguage =>
+    Seq(NotPermittedMessages.English, NotPermittedMessages.Welsh).foreach { messagesForLanguage =>
 
       s"when being rendered in lang code of '${messagesForLanguage.lang.code}'" - {
 
         implicit val msgs: Messages = messages(app, messagesForLanguage.lang)
         implicit val request: DataRequest[AnyContentAsEmpty.type] = dataRequest(FakeRequest(), emptyUserAnswers)
 
-        val view = app.injector.instanceOf[IndexPage]
+        val view = app.injector.instanceOf[NotPermittedView]
 
-        implicit val doc: Document = Jsoup.parse(view().toString())
+        implicit val doc: Document = Jsoup.parse(view(testErn).toString())
 
-        // scalastyle:off magic.number
         behave like pageWithExpectedElementsAndMessages(Seq(
-          Selectors.title -> messagesForLanguage.title
+          Selectors.h1 -> messagesForLanguage.heading,
+          Selectors.title -> messagesForLanguage.title,
+          Selectors.p(1) -> messagesForLanguage.p1,
+          Selectors.p(2) -> messagesForLanguage.p2,
+          Selectors.p(3) -> messagesForLanguage.p3
         ))
-
-
       }
     }
   }
+
+
 }
