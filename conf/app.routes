@@ -15,6 +15,8 @@ GET        /account/sign-out                            controllers.auth.AuthCon
 GET        /account/signed-out                          controllers.auth.SignedOutController.onPageLoad()
 GET        /account/timeout                             controllers.TimeoutController.onPageLoad()
 
+GET        /trader/:ern/movement/:arc/not-permitted                     controllers.NotPermittedPageController.onPageLoad(ern, arc)
+
 GET        /trader/:ern/movement/:arc                                   controllers.IndexController.onPageLoad(ern: String, arc: String)
 
 GET        /trader/:ern/movement/:arc/no-information-delay              controllers.JourneyRecoveryController.onPageLoad(ern: String, arc: String)
