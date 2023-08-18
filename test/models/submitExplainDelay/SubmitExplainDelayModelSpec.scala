@@ -44,7 +44,7 @@ class SubmitExplainDelayModelSpec extends SpecBase with GetMovementResponseFixtu
       )
     )
 
-    val userAnswers = UserAnswers("internalId", "ern", testArc)
+    val userAnswers = UserAnswers("ern", testArc)
       .set(DelayTypePage, DelayType.ReportOfReceipt)
       .set(DelayReasonPage, DelayReason.Other)
       .set(DelayDetailsPage, Some("more information"))

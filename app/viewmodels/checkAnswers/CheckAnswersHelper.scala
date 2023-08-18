@@ -38,7 +38,6 @@ class CheckAnswersHelper @Inject()(delayDetailsSummary: DelayDetailsSummary) {
   def summaryList(confirmationDetails: ConfirmationDetails)(implicit request: DataRequest[_], messages: Messages): SummaryList = {
 
     val userAnswersFromConfirmationDetails = UserAnswers(
-      internalId = request.internalId,
       ern = request.ern,
       arc = request.arc
     )
