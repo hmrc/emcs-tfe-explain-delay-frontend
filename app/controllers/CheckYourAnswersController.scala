@@ -79,7 +79,6 @@ class CheckYourAnswersController @Inject()(
                                                (implicit hc: HeaderCarrier, request: DataRequest[_]): Future[UserAnswers] = {
     userAnswersService.set(
       UserAnswers(
-        internalId,
         ern,
         arc,
         data = Json.obj(
