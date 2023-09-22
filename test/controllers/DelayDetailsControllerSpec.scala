@@ -23,8 +23,10 @@ import models.DelayType.ReportOfReceipt
 import models.{DelayReason, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.{DelayDetailsPage, DelayReasonPage, DelayTypePage}
+import play.api.Application
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -34,14 +36,14 @@ import views.html.DelayDetailsView
 class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
 
   class Fixture(val userAnswers: Option[UserAnswers] = Some(emptyUserAnswers.set(DelayTypePage, ReportOfReceipt))) {
-    val application = applicationBuilder(userAnswers)
+    val application: Application = applicationBuilder(userAnswers)
       .overrides(
         bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
         bind[UserAnswersService].toInstance(mockUserAnswersService)
       )
       .build()
 
-    lazy val view = application.injector.instanceOf[DelayDetailsView]
+    lazy val view: DelayDetailsView = application.injector.instanceOf[DelayDetailsView]
   }
 
   def onwardRoute: Call = Call("GET", "/foo")
@@ -58,6 +60,13 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
         .set(DelayTypePage, ReportOfReceipt)
         .set(DelayReasonPage, DelayReason.Other)
         .set(DelayDetailsPage, Some("answer"))
+    )
+
+    val userAnswersAllWhiteSpaces = Some(
+      emptyUserAnswers
+        .set(DelayTypePage, ReportOfReceipt)
+        .set(DelayReasonPage, DelayReason.BadWeather)
+        .set(DelayDetailsPage, None)
     )
 
     val userAnswersUptoThisController = Some(
@@ -123,6 +132,32 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
       }
     }
 
+    "must redirect to the next page if Delay Details was all whitespace" in new Fixture(userAnswersAllWhiteSpaces) {
+      running(application) {
+        val request =
+          FakeRequest(POST, delayDetailsRoute)
+            .withFormUrlEncodedBody(("value", "  "))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to the next page if Delay Details contains some whitespace" in new Fixture(userAnswers) {
+      running(application) {
+        val request =
+          FakeRequest(POST, delayDetailsRoute)
+            .withFormUrlEncodedBody(("value", "   answer  "))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
     "must redirect to Journey Recovery for a GET if no existing data is found" in new Fixture(None) {
       running(application) {
         val request = FakeRequest(GET, delayDetailsRoute)
@@ -144,6 +179,28 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(testErn, testArc).url
+      }
+    }
+
+    ".trimValue" - {
+
+      val application: Application = new GuiceApplicationBuilder().build()
+      val controller: DelayDetailsController = application.injector.instanceOf[DelayDetailsController]
+
+      "must return None when only whitespace present" in {
+        controller.trim(Some("   ")) mustBe None
+      }
+
+      "must return None when passed a None" in {
+        controller.trim(None) mustBe None
+      }
+
+      "must return Some value when text is present" in {
+        controller.trim(Some("more information")) mustBe Some("more information")
+      }
+
+      "must return Some value with whitespace removed" in {
+        controller.trim(Some("     more information       ")) mustBe Some("more information")
       }
     }
   }

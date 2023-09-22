@@ -68,9 +68,17 @@ class DelayDetailsController @Inject()(
               BadRequest(view(formWithErrors, isOtherDelayReason, mode))
             ),
           value =>
-            saveAndRedirect(DelayDetailsPage, value, mode)
+            saveAndRedirect(DelayDetailsPage, trim(value), mode)
         )
 
       }
     }
+
+  def trim(value: Option[String]): Option[String] = {
+    value match {
+      case Some(value) if value.trim.isEmpty => None
+      case Some(value) if value.trim.nonEmpty => Some(value.trim)
+      case _ => value
+    }
+  }
 }
