@@ -26,6 +26,7 @@ import pages.{DelayDetailsPage, DelayReasonPage, DelayTypePage}
 import play.api.Application
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -131,7 +132,7 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
       }
     }
 
-    "must return None after trim if Delay Details was all whitespace" in new Fixture(userAnswersAllWhiteSpaces) {
+    "must redirect to the next page if Delay Details was all whitespace" in new Fixture(userAnswersAllWhiteSpaces) {
       running(application) {
         val request =
           FakeRequest(POST, delayDetailsRoute)
@@ -144,11 +145,11 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
       }
     }
 
-    "must return trimmed whitespaces after trim if Delay Details contains some whitespace" in new Fixture(userAnswers) {
+    "must redirect to the next page if Delay Details contains some whitespace" in new Fixture(userAnswers) {
       running(application) {
         val request =
           FakeRequest(POST, delayDetailsRoute)
-            .withFormUrlEncodedBody(("value", "answer  "))
+            .withFormUrlEncodedBody(("value", "   answer  "))
 
         val result = route(application, request).value
 
@@ -178,6 +179,28 @@ class DelayDetailsControllerSpec extends SpecBase with MockUserAnswersService {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(testErn, testArc).url
+      }
+    }
+
+    ".trimValue" - {
+
+      val application: Application = new GuiceApplicationBuilder().build()
+      val controller: DelayDetailsController = application.injector.instanceOf[DelayDetailsController]
+
+      "must return None when only whitespace present" in {
+        controller.trim(Some("   ")) mustBe None
+      }
+
+      "must return None when passed a None" in {
+        controller.trim(None) mustBe None
+      }
+
+      "must return Some value when text is present" in {
+        controller.trim(Some("more information")) mustBe Some("more information")
+      }
+
+      "must return Some value with whitespace removed" in {
+        controller.trim(Some("     more information       ")) mustBe Some("more information")
       }
     }
   }

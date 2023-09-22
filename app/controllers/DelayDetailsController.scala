@@ -74,11 +74,11 @@ class DelayDetailsController @Inject()(
       }
     }
 
-  def trim(option: Option[String]): Option[String] = {
-    option match {
+  def trim(value: Option[String]): Option[String] = {
+    value match {
       case Some(value) if value.trim.isEmpty => None
-      case Some(value) if value.trim.nonEmpty => Some(value)
-      case _ => option
+      case Some(value) if value.trim.nonEmpty => Some(value.trim)
+      case _ => value
     }
   }
 }
