@@ -124,7 +124,7 @@ delayDetails.error.length = Information must be 350 characters or less
 delayDetails.error.character = Information must contain letters or numbers
 delayDetails.error.xss = Information must not include < and > and : and ;
 delayDetails.error.required = Give information about the other reason for the delay
-delayDetails.change.hidden = DelayDetails
+delayDetails.change.hidden = more information about the delay
 
 journeyRecovery.title = There is a problem
 journeyRecovery.heading = There is a problem
