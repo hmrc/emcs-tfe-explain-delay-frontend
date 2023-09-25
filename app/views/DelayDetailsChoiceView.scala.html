@@ -22,7 +22,8 @@
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
     govukButton: GovukButton,
-    h1: components.h1
+    h1: components.h1,
+    h2: components.h2
 )
 
 @(form: Form[_], mode: Mode)(implicit request: DataRequest[_], messages: Messages)
@@ -34,6 +35,8 @@
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
+
+@h2((messages("arc.subHeading", request.arc)),"govuk-caption-l")
 
         @govukRadios(
             RadiosViewModel.yesNo(
@@ -49,7 +52,7 @@
 }
 
 @heading = {
-    @h1("delayDetailsChoice.heading", Some(messages("arc.subHeading", request.arc)), "govuk-fieldset__heading")
+    @h1("delayDetailsChoice.heading", None, "govuk-fieldset__heading")
 }
 
 @{
