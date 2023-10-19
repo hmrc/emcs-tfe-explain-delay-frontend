@@ -43,7 +43,8 @@ class ConfirmationController @Inject()(
   def onPageLoad(ern: String, arc: String): Action[AnyContent] =
     authorisedDataRequestWithCachedMovementAsync(ern, arc) { implicit request =>
       withAnswer(ConfirmationPage) { confirmationDetails =>
-        logger.info("[onPageLoad] Successful Explain Delay confirmation page displayed")
+        logger.info(s"[onPageLoad] Delay type: [${messagesApi(s"delayType.${confirmationDetails.delayType.toString}")(request.lang(messagesApi))}]")
+        logger.info(s"[onPageLoad] Delay reason: [${messagesApi(s"delayReason.${confirmationDetails.delayReason.toString}")(request.lang(messagesApi))}]")
         Future.successful(Ok(view(confirmationDetails)))
       }
     }
