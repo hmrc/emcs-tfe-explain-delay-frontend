@@ -16,10 +16,16 @@
 
 package models.response.emcsTfe
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
-case class SubmitExplainDelayResponse(receipt: String, receiptDate: String)
+case class SubmitExplainDelayResponse(receipt: String, downstreamService: String)
 
 object SubmitExplainDelayResponse {
-  implicit val format: Format[SubmitExplainDelayResponse] = Json.format
+  implicit val reads: Reads[SubmitExplainDelayResponse] =
+    (__ \ "message").read[String].map(SubmitExplainDelayResponse(_, "EIS")) or
+      (__ \ "receipt").read[String].map(SubmitExplainDelayResponse(_, "ChRIS"))
+
+  implicit val writes: OWrites[SubmitExplainDelayResponse] =
+    (o: SubmitExplainDelayResponse) => Json.obj("receipt" -> o.receipt)
 }

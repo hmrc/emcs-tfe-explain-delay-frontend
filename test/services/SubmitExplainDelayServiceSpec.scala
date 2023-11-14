@@ -52,7 +52,7 @@ class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelay
 
         val submission = SubmitExplainDelayModel(getMovementResponseModel)(userAnswers)
 
-        MockSubmitExplainDelayConnector.submit(testErn, submission).returns(Future.successful(Right(successResponse)))
+        MockSubmitExplainDelayConnector.submit(testErn, submission).returns(Future.successful(Right(successResponseChRIS)))
 
         MockAuditingService.audit(
           SubmitExplainDelayAudit(
@@ -60,11 +60,11 @@ class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelay
             "internalId",
             "ern",
             submission,
-            Right(successResponse)
+            Right(successResponseChRIS)
           )
         ).noMoreThanOnce()
 
-        testService.submit(testErn, testArc)(hc, request).futureValue mustBe successResponse
+        testService.submit(testErn, testArc)(hc, request).futureValue mustBe successResponseChRIS
       }
     }
 

@@ -46,8 +46,7 @@ case class SubmitExplainDelayAudit(
       case Right(success) =>
         Json.obj(fields =
           "status" -> "success",
-          "receipt" -> success.receipt,
-          "receiptDate" -> success.receiptDate
+          "receipt" -> success.receipt
         )
       case Left(failedMessage) =>
         Json.obj(fields =

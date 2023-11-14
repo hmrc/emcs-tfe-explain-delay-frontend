@@ -42,7 +42,7 @@ object SubmitExplainDelayAuditModelFixture {
     submissionResponse = Right(
       SubmitExplainDelayResponse(
         receipt = "1234567890",
-        receiptDate = s"$time"
+        downstreamService = "ChRIS"
       )
     )
   )
@@ -61,8 +61,7 @@ object SubmitExplainDelayAuditModelFixture {
        |   "delayReasonType": "${DelayReason.Other.toString}",
        |   "additionalInformation": "more information",
        |   "status": "success",
-       |   "receipt": "1234567890",
-       |   "receiptDate": "$time"
+       |   "receipt": "1234567890"
        |}
        |""".stripMargin)
 

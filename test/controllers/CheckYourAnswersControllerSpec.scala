@@ -17,11 +17,11 @@
 package controllers
 
 import base.SpecBase
+import fixtures.SubmitExplainDelayFixtures
 import handlers.ErrorHandler
 import mocks.services.{MockSubmitExplainDelayService, MockUserAnswersService}
 import models.DelayReason.Strikes
 import models.DelayType.ReportOfReceipt
-import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.{ConfirmationDetails, MissingMandatoryPage, SubmitExplainDelayException, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.{ConfirmationPage, DelayDetailsPage, DelayReasonPage, DelayTypePage}
@@ -34,7 +34,7 @@ import views.html.CheckYourAnswersView
 
 import scala.concurrent.Future
 
-class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersService with MockSubmitExplainDelayService {
+class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersService with MockSubmitExplainDelayService with SubmitExplainDelayFixtures {
 
   class Fixture(val userAnswers: Option[UserAnswers] = Some(emptyUserAnswers
     .set(DelayTypePage, ReportOfReceipt)
@@ -114,10 +114,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
           )) {
             running(application) {
 
-              val successResponse = SubmitExplainDelayResponse(receipt = testConfirmationReference, receiptDate = testReceiptDate)
-
               MockSubmitExplainDelayService.submit(testErn, testArc, getMovementResponseModel, userAnswers.get)
-                .returns(Future.successful(successResponse))
+                .returns(Future.successful(successResponseChRIS))
 
               val updatedAnswers = userAnswers.get.set(ConfirmationPage,
                 ConfirmationDetails(
