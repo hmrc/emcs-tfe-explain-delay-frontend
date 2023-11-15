@@ -26,7 +26,7 @@ class SubmitExplainDelayResponseSpec extends SpecBase with SubmitExplainDelayFix
 
     "should read from json" - {
 
-      "should read from json - ChRIS" in {
+      "for ChRIS response" in {
         Json.fromJson[SubmitExplainDelayResponse](successResponseChRISJson) mustBe JsSuccess(successResponseChRIS, JsPath \ "receipt")
       }
 
