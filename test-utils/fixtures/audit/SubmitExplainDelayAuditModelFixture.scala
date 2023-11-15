@@ -20,8 +20,9 @@ import models.audit.SubmitExplainDelayAudit
 import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.{SubmitExplainDelayModel, SubmitterType}
 import models.{DelayReason, DelayType, UnexpectedDownstreamResponseError}
-import org.joda.time.LocalDateTime
 import play.api.libs.json.{JsValue, Json}
+
+import java.time.LocalDateTime
 
 object SubmitExplainDelayAuditModelFixture {
   val time = LocalDateTime.now().toString

@@ -39,11 +39,10 @@ import models.requests.DataRequest
 import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.SubmitExplainDelayModel
 import models.{ErrorResponse, SubmitExplainDelayException}
-import org.joda.time.LocalDateTime
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 

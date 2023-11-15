@@ -21,8 +21,6 @@ import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.SubmitExplainDelayModel
 import play.api.libs.json.{JsValue, Json}
 
-import java.time.LocalDate
-
 case class SubmitExplainDelayAudit(
                                     credentialId: String,
                                     internalId: String,
