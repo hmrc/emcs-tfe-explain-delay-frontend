@@ -39,6 +39,7 @@ import models.requests.DataRequest
 import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.SubmitExplainDelayModel
 import models.{ErrorResponse, SubmitExplainDelayException}
+import org.joda.time.LocalDateTime
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 
@@ -80,7 +81,7 @@ class SubmitExplainDelayService @Inject()(submitExplainDelayConnector: SubmitExp
         credentialId = dataRequest.request.request.credId,
         internalId = dataRequest.internalId,
         ern = dataRequest.ern,
-        receiptDate = LocalDate.now.toString,
+        receiptDate = LocalDateTime.now.toString,
         submissionRequest = submissionRequest,
         submissionResponse = submissionResponse
       )
