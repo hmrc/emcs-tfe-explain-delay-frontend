@@ -42,6 +42,7 @@ import models.{ErrorResponse, SubmitExplainDelayException}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 
+import java.time.LocalDateTime
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -79,6 +80,7 @@ class SubmitExplainDelayService @Inject()(submitExplainDelayConnector: SubmitExp
         credentialId = dataRequest.request.request.credId,
         internalId = dataRequest.internalId,
         ern = dataRequest.ern,
+        receiptDate = LocalDateTime.now.toString,
         submissionRequest = submissionRequest,
         submissionResponse = submissionResponse
       )

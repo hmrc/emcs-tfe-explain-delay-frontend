@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SubmitExplainDelayConnector @Inject()(val http: HttpClient,
                                             config: AppConfig) extends EmcsTfeHttpParser[SubmitExplainDelayResponse] {
 
-  override implicit val reads: Reads[SubmitExplainDelayResponse] = SubmitExplainDelayResponse.format
+  override implicit val reads: Reads[SubmitExplainDelayResponse] = SubmitExplainDelayResponse.reads
 
   lazy val baseUrl: String = config.emcsTfeBaseUrl
 

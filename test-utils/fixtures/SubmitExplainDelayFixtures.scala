@@ -32,7 +32,18 @@ trait SubmitExplainDelayFixtures extends BaseFixtures {
     additionalInformation = Some("more information about explaining the delay")
   )
 
-  val successResponse = SubmitExplainDelayResponse(receipt = testConfirmationReference, receiptDate = testReceiptDate)
+  val successResponseChRIS = SubmitExplainDelayResponse(receipt = testConfirmationReference, "ChRIS")
 
-  val successResponseJson = Json.obj("receipt" -> testConfirmationReference, "receiptDate" -> testReceiptDate)
+  val successResponseEIS = SubmitExplainDelayResponse(receipt = testConfirmationReference, "EIS")
+
+  val successResponseChRISJson = Json.obj("receipt" -> testConfirmationReference)
+
+  val successResponseEISJson = Json.parse(
+    s"""{
+       | "status": "OK",
+       | "message": "$testConfirmationReference",
+       | "emcsCorrelationId": "3e8dae97-b586-4cef-8511-68ac12da9028"
+       |}""".stripMargin)
+
+  val successResponseJson = Json.obj("receipt" -> testConfirmationReference)
 }

@@ -22,15 +22,16 @@ import models.submitExplainDelay.{SubmitExplainDelayModel, SubmitterType}
 import models.{DelayReason, DelayType, UnexpectedDownstreamResponseError}
 import play.api.libs.json.{JsValue, Json}
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 object SubmitExplainDelayAuditModelFixture {
-  val time = LocalDate.now().toString
+  val time = LocalDateTime.now().toString
 
   val submitExplainDelayAuditSuccessful: SubmitExplainDelayAudit = SubmitExplainDelayAudit(
     credentialId = "credentialId",
     internalId = "internalId",
     ern = "ERN1",
+    receiptDate = time,
     submissionRequest = SubmitExplainDelayModel(
       arc = "ARC1",
       sequenceNumber = 1,
@@ -42,7 +43,7 @@ object SubmitExplainDelayAuditModelFixture {
     submissionResponse = Right(
       SubmitExplainDelayResponse(
         receipt = "1234567890",
-        receiptDate = s"$time"
+        downstreamService = "ChRIS"
       )
     )
   )
@@ -71,6 +72,7 @@ object SubmitExplainDelayAuditModelFixture {
     credentialId = "credentialId",
     internalId = "internalId",
     ern = "ERN1",
+    receiptDate = time,
     submissionRequest = SubmitExplainDelayModel(
       arc = "ARC1",
       sequenceNumber = 1,

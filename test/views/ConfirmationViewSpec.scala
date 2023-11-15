@@ -58,15 +58,14 @@ class ConfirmationViewSpec extends ViewSpecBase with ViewBehaviours {
           Selectors.title -> messagesForLanguage.title,
           Selectors.h1 -> messagesForLanguage.heading,
           Selectors.h2(1) -> messagesForLanguage.delayInformationH2,
-          Selectors.p(1) -> messagesForLanguage.submissionReference(testConfirmationReference),
-          Selectors.p(2) -> messagesForLanguage.print,
+          Selectors.p(1) -> messagesForLanguage.print,
           Selectors.h2(2) -> messagesForLanguage.whatNextH2,
-          Selectors.p(3) -> messagesForLanguage.whatNextP1,
+          Selectors.p(2) -> messagesForLanguage.whatNextP1,
           Selectors.h2(3) -> messagesForLanguage.mayNeedToDoH2,
-          Selectors.p(4) -> messagesForLanguage.mayNeedToDoP1,
-          Selectors.p(5) -> messagesForLanguage.mayNeedToDoP2,
+          Selectors.p(3) -> messagesForLanguage.mayNeedToDoP1,
+          Selectors.p(4) -> messagesForLanguage.mayNeedToDoP2,
           Selectors.button -> messagesForLanguage.atAGlanceLink,
-          Selectors.p(6) -> messagesForLanguage.feedback
+          Selectors.p(5) -> messagesForLanguage.feedback
         ))
       }
     }

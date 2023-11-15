@@ -25,7 +25,6 @@ object ConfirmationMessages {
     val heading: String
     val title: String
     val delayInformationH2: String
-    val submissionReference: String => String
     val print: String
     val whatNextH2: String
     val whatNextP1: String
@@ -39,7 +38,6 @@ object ConfirmationMessages {
     val heading: String = "Explanation for delay submitted"
     val title: String = titleHelper(heading)
     val delayInformationH2: String = "Delay information"
-    val submissionReference: String => String = "Your submission reference is " + _
     val print: String = "Print this screen to make a record of your submission."
     val whatNextH2: String = "What happens next"
     val whatNextP1: String = "The movement will be updated to show you have successfully submitted an explanation for delay. This may not happen straight away."
@@ -53,7 +51,6 @@ object ConfirmationMessages {
     val heading: String = "Explanation for delay submitted"
     val title: String = titleHelper(heading)
     val delayInformationH2: String = "Delay information"
-    val submissionReference: String => String = "Your submission reference is " + _
     val print: String = "Print this screen to make a record of your submission."
     val whatNextH2: String = "What happens next"
     val whatNextP1: String = "The movement will be updated to show you have successfully submitted an explanation for delay. This may not happen straight away."

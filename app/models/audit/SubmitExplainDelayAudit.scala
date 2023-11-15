@@ -25,6 +25,7 @@ case class SubmitExplainDelayAudit(
                                     credentialId: String,
                                     internalId: String,
                                     ern: String,
+                                    receiptDate: String,
                                     submissionRequest: SubmitExplainDelayModel,
                                     submissionResponse: Either[ErrorResponse, SubmitExplainDelayResponse]
                                   ) extends AuditModel {
@@ -47,7 +48,7 @@ case class SubmitExplainDelayAudit(
         Json.obj(fields =
           "status" -> "success",
           "receipt" -> success.receipt,
-          "receiptDate" -> success.receiptDate
+          "receiptDate" -> receiptDate
         )
       case Left(failedMessage) =>
         Json.obj(fields =

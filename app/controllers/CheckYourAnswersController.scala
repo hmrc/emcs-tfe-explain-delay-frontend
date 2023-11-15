@@ -60,6 +60,8 @@ class CheckYourAnswersController @Inject()(
     authorisedDataRequestWithUpToDateMovementAsync(ern, arc) { implicit request =>
       submitExplainDelayService.submit(ern, arc).flatMap { response =>
 
+        logger.debug(s"[onSubmit] response received from downstream service ${response.downstreamService}: ${response.receipt}")
+
         deleteDraftAndSetConfirmationFlow(request.internalId, request.ern, request.arc, response).map { _ =>
           Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode, request.userAnswers))
         }

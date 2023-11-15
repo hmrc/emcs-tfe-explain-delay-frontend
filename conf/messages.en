@@ -153,7 +153,6 @@ checkYourAnswers.submit = Submit explanation for delay
 confirmation.title = Explanation for delay submitted
 confirmation.heading = Explanation for delay submitted
 confirmation.delayInformation.h2 = Delay information
-confirmation.reference = Your submission reference is
 confirmation.print.link = Print this screen
 confirmation.print.afterLink = to make a record of your submission.
 confirmation.whatNext.h2 = What happens next
