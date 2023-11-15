@@ -30,22 +30,23 @@ class SubmitExplainDelayResponseSpec extends SpecBase with SubmitExplainDelayFix
         Json.fromJson[SubmitExplainDelayResponse](successResponseChRISJson) mustBe JsSuccess(successResponseChRIS, JsPath \ "receipt")
       }
 
+      "for EIS response" in {
+        Json.fromJson[SubmitExplainDelayResponse](successResponseEISJson) mustBe JsSuccess(successResponseEIS, JsPath \ "message")
+      }
+
     }
 
     "should write to json" - {
 
-      "should read from json - EIS" in {
-        Json.fromJson[SubmitExplainDelayResponse](successResponseEISJson) mustBe JsSuccess(successResponseEIS, JsPath \ "message")
-      }
-
-      "should write to json - ChRIS" in {
+      "for ChRIS response" in {
         Json.toJson(successResponseChRIS) mustBe successResponseJson
       }
 
-      "should write to json - EIS" in {
+      "for EIS response" in {
         Json.toJson(successResponseEIS) mustBe successResponseJson
       }
 
     }
+
   }
 }
