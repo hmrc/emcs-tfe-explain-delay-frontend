@@ -21,10 +21,13 @@ import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.SubmitExplainDelayModel
 import play.api.libs.json.{JsValue, Json}
 
+import java.time.LocalDate
+
 case class SubmitExplainDelayAudit(
                                     credentialId: String,
                                     internalId: String,
                                     ern: String,
+                                    receiptDate: String,
                                     submissionRequest: SubmitExplainDelayModel,
                                     submissionResponse: Either[ErrorResponse, SubmitExplainDelayResponse]
                                   ) extends AuditModel {
@@ -46,7 +49,8 @@ case class SubmitExplainDelayAudit(
       case Right(success) =>
         Json.obj(fields =
           "status" -> "success",
-          "receipt" -> success.receipt
+          "receipt" -> success.receipt,
+          "receiptDate" -> receiptDate
         )
       case Left(failedMessage) =>
         Json.obj(fields =

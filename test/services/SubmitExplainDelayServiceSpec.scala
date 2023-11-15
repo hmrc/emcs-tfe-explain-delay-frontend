@@ -59,6 +59,7 @@ class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelay
             "credId",
             "internalId",
             "ern",
+            "receipt date",
             submission,
             Right(successResponseChRIS)
           )
@@ -87,6 +88,7 @@ class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelay
             "credId",
             "internalId",
             "ern",
+            "receipt date",
             submission,
             Left(UnexpectedDownstreamResponseError)
           )

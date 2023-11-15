@@ -31,6 +31,7 @@ object SubmitExplainDelayAuditModelFixture {
     credentialId = "credentialId",
     internalId = "internalId",
     ern = "ERN1",
+    receiptDate = time,
     submissionRequest = SubmitExplainDelayModel(
       arc = "ARC1",
       sequenceNumber = 1,
@@ -61,7 +62,8 @@ object SubmitExplainDelayAuditModelFixture {
        |   "delayReasonType": "${DelayReason.Other.toString}",
        |   "additionalInformation": "more information",
        |   "status": "success",
-       |   "receipt": "1234567890"
+       |   "receipt": "1234567890",
+       |   "receiptDate": "$time"
        |}
        |""".stripMargin)
 
@@ -70,6 +72,7 @@ object SubmitExplainDelayAuditModelFixture {
     credentialId = "credentialId",
     internalId = "internalId",
     ern = "ERN1",
+    receiptDate = time,
     submissionRequest = SubmitExplainDelayModel(
       arc = "ARC1",
       sequenceNumber = 1,
