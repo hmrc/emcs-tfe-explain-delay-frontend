@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package models.requests
+package fixtures.messages
 
-import play.api.mvc.{Request, WrappedRequest}
+import fixtures.i18n
+object ActiveTraderMessages {
 
-case class UserRequest[A](request: Request[A],
-                          ern: String,
-                          internalId: String,
-                          credId: String,
-                          hasMultipleErns: Boolean) extends WrappedRequest[A](request)
+  sealed trait ViewMessages { _: i18n =>
+    val changeTraderType: String = "Change trader type"
+  }
+
+  object English extends ViewMessages with BaseEnglish
+}

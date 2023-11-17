@@ -30,7 +30,7 @@
 
 @(form: Form[_], fieldIsMandatory: Boolean, mode: Mode)(implicit request: DataRequest[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("delayDetails.title"))) {
+@layout(pageTitle = title(form, messages("delayDetails.title")), maybeShowActiveTrader = maybeShowActiveTrader(request)) {
 
     @formHelper(action = routes.DelayDetailsController.onSubmit(request.ern, request.arc, mode)) {
 
@@ -68,5 +68,3 @@
 @{
     //$COVERAGE-OFF$
 }
-
-
