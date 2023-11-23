@@ -16,7 +16,7 @@
 
 package config
 
-import featureswitch.core.config.{FeatureSwitching, ReturnToLegacy, WelshLanguage}
+import featureswitch.core.config._
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
@@ -109,6 +109,14 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, configuration: Configu
   private def userAllowListService: String = servicesConfig.baseUrl("user-allow-list")
 
   def userAllowListBaseUrl: String = s"$userAllowListService/user-allow-list"
+
+  private def traderKnownFactsReferenceDataService: String =
+    if (isEnabled(StubGetTraderKnownFacts)) {
+      servicesConfig.baseUrl("emcs-tfe-reference-data-stub")
+    }
+    else {
+      servicesConfig.baseUrl("emcs-tfe-reference-data")
+    }
+
+  def traderKnownFactsReferenceDataBaseUrl: String = s"$traderKnownFactsReferenceDataService/emcs-tfe-reference-data"
 }
-
-

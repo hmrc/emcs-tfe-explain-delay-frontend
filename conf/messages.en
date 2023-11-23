@@ -86,6 +86,8 @@ global.error.InternalServerError500.p1.href.suffix=if you need to create a movem
 global.error.InternalServerError500.p2.href.text=Contact the EMCS helpdesk
 global.error.InternalServerError500.p2.href.suffix=if you need to speak to someone about your account.
 
+activeTrader.link = Change trader type
+
 arc.subHeading = Explanation for delay to {0}
 
 error.browser.title.prefix = Error:

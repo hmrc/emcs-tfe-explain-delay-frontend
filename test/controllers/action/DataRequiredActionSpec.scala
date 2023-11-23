@@ -51,10 +51,11 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with MockUserAns
         val result = dataRequiredAction.callRefine(
           OptionalDataRequest(
             MovementRequest(
-              UserRequest(fakeRequest, testErn, testInternalId, testCredId),
+              UserRequest(fakeRequest, testErn, testInternalId, testCredId, false),
               testArc,
               getMovementResponseModel
             ),
+            None,
             None
           )
         ).futureValue
@@ -87,11 +88,12 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with MockUserAns
           val result = dataRequiredAction.callRefine(
             OptionalDataRequest(
               MovementRequest(
-                UserRequest(fakeRequest, testErn, testInternalId, testCredId),
+                UserRequest(fakeRequest, testErn, testInternalId, testCredId, false),
                 testArc,
                 getMovementResponseModel
               ),
-              Some(userAnswers)
+              Some(userAnswers),
+              None
             )
           ).futureValue
 
@@ -118,15 +120,17 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with MockUserAns
             delayReason = Strikes,
             delayDetails = None
           ))
+          val traderKnownFacts = testMinTraderKnownFacts
 
           val result = dataRequiredAction.callRefine(
             OptionalDataRequest(
               MovementRequest(
-                UserRequest(fakeRequest, testErn, testInternalId, testCredId),
+                UserRequest(fakeRequest, testErn, testInternalId, testCredId, false),
                 testArc,
                 getMovementResponseModel
               ),
-              Some(userAnswers)
+              Some(userAnswers),
+              Some(traderKnownFacts)
             )
           ).futureValue
 
@@ -143,15 +147,17 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with MockUserAns
         val fakeRequest = FakeRequest("GET", routes.DelayReasonController.onPageLoad(testErn, testArc, NormalMode).url)
 
         val userAnswers = emptyUserAnswers.set(DelayReasonPage, Strikes)
+        val traderKnownFacts = testMinTraderKnownFacts
 
         val result = dataRequiredAction.callRefine(
           OptionalDataRequest(
             MovementRequest(
-              UserRequest(fakeRequest, testErn, testInternalId, testCredId),
+              UserRequest(fakeRequest, testErn, testInternalId, testCredId, false),
               testArc,
               getMovementResponseModel
             ),
-            Some(userAnswers)
+            Some(userAnswers),
+            Some(traderKnownFacts)
           )
         ).futureValue
 

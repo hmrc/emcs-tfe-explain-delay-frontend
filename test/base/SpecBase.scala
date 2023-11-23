@@ -19,7 +19,7 @@ package base
 import controllers.action.{FakeAuthAction, FakeDataRetrievalAction, FakeMovementAction, FakeUserAllowListAction}
 import controllers.actions.{AuthAction, DataRetrievalAction, MovementAction, UserAllowListAction}
 import fixtures.{BaseFixtures, GetMovementResponseFixtures}
-import models.UserAnswers
+import models.{TraderKnownFacts, UserAnswers}
 import models.requests.{DataRequest, MovementRequest, OptionalDataRequest, UserRequest}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
@@ -53,10 +53,11 @@ trait SpecBase
     cookies(of).get("PLAY_LANG").get.value
   }
 
-  def optionalDataRequest[A](request: Request[A], answers: Option[UserAnswers] = None): OptionalDataRequest[A] =
-    OptionalDataRequest(movementRequest(request), answers)
+  def optionalDataRequest[A](request: Request[A], userAnswers: Option[UserAnswers] = None, traderKnownFacts: Option[TraderKnownFacts] = None): OptionalDataRequest[A] =
+    OptionalDataRequest(movementRequest(request), userAnswers, traderKnownFacts)
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
+  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
+                                   optTraderKnownFacts: Option[TraderKnownFacts] = Some(testMinTraderKnownFacts)): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .configure(
         "play.filters.csp.nonce.enabled" -> false
@@ -64,14 +65,14 @@ trait SpecBase
       .overrides(
         bind[AuthAction].to[FakeAuthAction],
         bind[UserAllowListAction].to[FakeUserAllowListAction],
-        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
+        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers, optTraderKnownFacts)),
         bind[MovementAction].toInstance(new FakeMovementAction(getMovementResponseModel))
       )
 
-  def userRequest[A](request: Request[A]): UserRequest[A] = UserRequest(request, testErn, testInternalId, testCredId)
+  def userRequest[A](request: Request[A]): UserRequest[A] = UserRequest(request, testErn, testInternalId, testCredId, false)
 
   def movementRequest[A](request: Request[A]): MovementRequest[A] = MovementRequest(userRequest(request), testArc, getMovementResponseModel)
 
-  def dataRequest[A](request: Request[A], answers: UserAnswers = emptyUserAnswers): DataRequest[A] =
-    DataRequest(movementRequest(request), answers)
+  def dataRequest[A](request: Request[A], userAnswers: UserAnswers = emptyUserAnswers, traderKnownFacts: TraderKnownFacts = testMinTraderKnownFacts): DataRequest[A] =
+    DataRequest(movementRequest(request), userAnswers, traderKnownFacts)
 }
