@@ -28,12 +28,12 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 
 class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelayConnector with SubmitExplainDelayFixtures with MockAuditingService {
 
-  implicit val hc = HeaderCarrier()
-  implicit val ec = ExecutionContext.global
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val ec: ExecutionContextExecutor = ExecutionContext.global
 
   lazy val testService = new SubmitExplainDelayService(mockSubmitExplainDelayConnector, mockAuditingService)
 

@@ -25,6 +25,7 @@ import models.DelayType.ReportOfReceipt
 import models.{ConfirmationDetails, MissingMandatoryPage, SubmitExplainDelayException, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.{ConfirmationPage, DelayDetailsPage, DelayReasonPage, DelayTypePage}
+import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -52,7 +53,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
     lazy val view = application.injector.instanceOf[CheckYourAnswersView]
     lazy val errorHandler = application.injector.instanceOf[ErrorHandler]
 
-    implicit lazy val msgs = messages(application)
+    implicit lazy val msgs: Messages = messages(application)
   }
 
   def onwardRoute = Call("GET", "/foo")
