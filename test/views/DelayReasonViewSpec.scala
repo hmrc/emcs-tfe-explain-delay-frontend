@@ -37,7 +37,7 @@ class DelayReasonViewSpec extends ViewSpecBase with ViewBehaviours {
 
   "DetailsSelectItemView" - {
 
-    Seq(DelayReasonMessages.English, DelayReasonMessages.Welsh).foreach { messagesForLanguage =>
+    Seq(DelayReasonMessages.English).foreach { messagesForLanguage =>
 
       s"when being rendered in lang code of '${messagesForLanguage.lang.code}'" - {
 

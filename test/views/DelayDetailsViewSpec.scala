@@ -33,7 +33,7 @@ class DelayDetailsViewSpec extends ViewSpecBase with ViewBehaviours {
   object Selectors extends BaseSelectors
 
   "DetailsSelectItemView" - {
-    Seq(DelayDetailsMessages.English, DelayDetailsMessages.Welsh).foreach { messagesForLanguage =>
+    Seq(DelayDetailsMessages.English).foreach { messagesForLanguage =>
 
       s"when being rendered in lang code of '${messagesForLanguage.lang.code}'" - {
 

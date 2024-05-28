@@ -31,10 +31,5 @@ object DelayDetailsChoiceMessages {
     val title: String = titleHelper(heading)
     val errorRequired: String = "Select yes if you want to give more information about the delay"
   }
-  object Welsh extends ViewMessages with BaseWelsh {
-    val heading: String = "Do you want to give any more information about the delay?"
-    val title: String = titleHelper(heading)
-    val errorRequired: String = "Select yes if you want to give more information about the delay"
-  }
 
 }

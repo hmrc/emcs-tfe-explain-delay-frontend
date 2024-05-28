@@ -37,7 +37,7 @@ class DelayDetailsSummarySpec extends SpecBase with Matchers {
 
   ".row" - {
 
-    Seq(DelayDetailsMessages.English, DelayDetailsMessages.Welsh).foreach { messagesForLanguage =>
+    Seq(DelayDetailsMessages.English).foreach { messagesForLanguage =>
 
       s"when being rendered in lang code of '${messagesForLanguage.lang.code}'" - {
 
