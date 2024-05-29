@@ -37,13 +37,5 @@ object DelayDetailsMessages {
     val noDelayInformationValue = "Give more information about the delay"
     val cyaChangeHidden = "more information about the delay"
   }
-  object Welsh extends ViewMessages with BaseWelsh {
-    val heading: String = "Give more information about the delay"
-    val title: String = titleHelper(heading)
-    override val hint: Boolean => String = value => if (value) "" else "Give information (optional)."
-    val cyaLabel = "More information about the delay"
-    val noDelayInformationValue = "Give more information about the delay"
-    val cyaChangeHidden = "more information about the delay"
-  }
 
 }

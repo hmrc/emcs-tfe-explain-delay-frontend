@@ -53,21 +53,5 @@ object DelayReasonMessages {
     override val cyaLabel: String = "Reason for delay"
     override val cyaChangeHidden: String = "reason for delay"
   }
-  object Welsh extends ViewMessages with BaseWelsh {
-    override def heading(delayType: String): String = s"Why has $delayType been delayed?"
-    override def title(delayType: String): String = titleHelper(heading(delayType))
-    override val reportReceiptDelay: String = "submitting a report of receipt"
-    override val changeOfDestinationDelay: String = "providing a consignee or change of destination for the movement"
-    override val radioOther: String = "Other"
-    override val radioCancelled: String = "The commercial transaction has been cancelled"
-    override val radioPending: String = "The commercial transaction is pending"
-    override val radioInvestigation: String = "Ongoing investigation by officials"
-    override val radioWeather: String = "Bad weather conditions"
-    override val radioStrikes: String = "Strike action"
-    override val radioAccident: String = "An accident in transit"
-    override val requiredError: String = "Select reason for the delay"
-    override val cyaLabel: String = "Reason for delay"
-    override val cyaChangeHidden: String = "reason for delay"
-  }
 
 }

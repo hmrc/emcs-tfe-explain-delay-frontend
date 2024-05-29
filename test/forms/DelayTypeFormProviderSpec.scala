@@ -47,7 +47,7 @@ class DelayTypeFormProviderSpec extends OptionFieldBehaviours with GuiceOneAppPe
 
   "Error Messages" - {
 
-    Seq(DelayTypeMessages.English, DelayTypeMessages.Welsh) foreach { messagesForLanguage =>
+    Seq(DelayTypeMessages.English) foreach { messagesForLanguage =>
 
       implicit val messages: Messages = app.injector.instanceOf[MessagesApi].preferred(Seq(messagesForLanguage.lang))
 

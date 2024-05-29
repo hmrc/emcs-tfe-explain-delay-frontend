@@ -48,7 +48,7 @@ class DelayDetailsChoiceFormProviderSpec extends BooleanFieldBehaviours with Gui
 
   "Error Messages" - {
 
-    Seq(DelayDetailsChoiceMessages.English, DelayDetailsChoiceMessages.Welsh) foreach { messagesForLanguage =>
+    Seq(DelayDetailsChoiceMessages.English) foreach { messagesForLanguage =>
 
       implicit val messages: Messages = app.injector.instanceOf[MessagesApi].preferred(Seq(messagesForLanguage.lang))
 

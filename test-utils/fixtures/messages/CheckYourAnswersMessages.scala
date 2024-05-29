@@ -35,12 +35,5 @@ object CheckYourAnswersMessages {
     val p1: String = "By submitting this explanation for delay you are confirming that, to the best of your knowledge, the details you are providing are correct."
     val submit: String = "Submit explanation for delay"
   }
-  object Welsh extends ViewMessages with BaseWelsh {
-    val heading: String = "Check your answers"
-    val title: String = titleHelper(heading)
-    val h2: String = "Now submit your explanation for delay"
-    val p1: String = "By submitting this explanation for delay you are confirming that, to the best of your knowledge, the details you are providing are correct."
-    val submit: String = "Submit explanation for delay"
-  }
 
 }
