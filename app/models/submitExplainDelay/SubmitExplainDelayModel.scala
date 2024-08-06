@@ -19,7 +19,7 @@ package models.submitExplainDelay
 import models.response.emcsTfe.GetMovementResponse
 import models.{DelayReason, DelayType, UserAnswers}
 import pages.{DelayDetailsPage, DelayReasonPage, DelayTypePage}
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Format, Json, OFormat}
 import utils.{JsonOptionFormatter, ModelConstructorHelpers}
 
 case class SubmitExplainDelayModel(arc: String,
@@ -31,7 +31,7 @@ case class SubmitExplainDelayModel(arc: String,
 
 object SubmitExplainDelayModel extends JsonOptionFormatter with ModelConstructorHelpers {
 
-  implicit val fmt: Format[SubmitExplainDelayModel] = Json.format
+  implicit val fmt: OFormat[SubmitExplainDelayModel] = Json.format
 
   def apply(movementDetails: GetMovementResponse)(implicit userAnswers: UserAnswers): SubmitExplainDelayModel = {
 
