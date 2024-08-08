@@ -23,7 +23,7 @@
         formHelper: FormWithCSRF,
         govukErrorSummary: GovukErrorSummary,
         govukCharacterCount : GovukCharacterCount,
-        govukButton: GovukButton,
+        continue: components.continue,
         h1: components.h1,
         h2: components.h2
 )
@@ -55,9 +55,7 @@
             ))
         }
 
-        @govukButton(
-            ButtonViewModel(messages("site.continue"))
-        )
+        @continue()
 
     }
 }
