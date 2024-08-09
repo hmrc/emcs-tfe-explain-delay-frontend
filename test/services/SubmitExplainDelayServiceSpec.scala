@@ -17,9 +17,11 @@
 package services
 
 import base.SpecBase
-import fixtures.SubmitExplainDelayFixtures
+import featureswitch.core.config.EnableNRS
+import fixtures.{NRSBrokerFixtures, SubmitExplainDelayFixtures}
+import mocks.config.MockAppConfig
 import mocks.connectors.MockSubmitExplainDelayConnector
-import mocks.services.MockAuditingService
+import mocks.services.{MockAuditingService, MockNRSBrokerService}
 import models.audit.SubmitExplainDelayAudit
 import models.submitExplainDelay.SubmitExplainDelayModel
 import models.{DelayReason, DelayType, SubmitExplainDelayException, UnexpectedDownstreamResponseError}
@@ -30,72 +32,100 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 
-class SubmitExplainDelayServiceSpec extends SpecBase with MockSubmitExplainDelayConnector with SubmitExplainDelayFixtures with MockAuditingService {
+class SubmitExplainDelayServiceSpec extends SpecBase
+  with MockSubmitExplainDelayConnector
+  with SubmitExplainDelayFixtures
+  with MockAuditingService
+  with MockAppConfig
+  with MockNRSBrokerService
+  with NRSBrokerFixtures {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val ec: ExecutionContextExecutor = ExecutionContext.global
 
-  lazy val testService = new SubmitExplainDelayService(mockSubmitExplainDelayConnector, mockAuditingService)
+  lazy val testService = new SubmitExplainDelayService(mockSubmitExplainDelayConnector, mockNRSBrokerService, mockAuditingService, mockAppConfig)
+
+  class Fixture(isNRSEnabled: Boolean) {
+    MockAppConfig.getFeatureSwitchValue(EnableNRS).returns(isNRSEnabled)
+  }
 
   ".submit(ern: String, submission: SubmitExplainDelayModel)" - {
 
-    "should submit, audit and return a success response" - {
+    Seq(true, false).foreach { nrsEnabled =>
 
-      "when connector receives a success from downstream" in {
+      s"when NRS enabled is '$nrsEnabled'" - {
 
-        val userAnswers = emptyUserAnswers
-          .set(DelayTypePage, DelayType.ReportOfReceipt)
-          .set(DelayReasonPage, DelayReason.Other)
-          .set(DelayDetailsPage, Some("more information"))
+        "should submit, audit and return a success response" - {
 
-        val request = dataRequest(FakeRequest(), userAnswers)
+          "when connector receives a success from downstream" in new Fixture(nrsEnabled) {
 
-        val submission = SubmitExplainDelayModel(getMovementResponseModel)(userAnswers)
+            val userAnswers = emptyUserAnswers
+              .set(DelayTypePage, DelayType.ReportOfReceipt)
+              .set(DelayReasonPage, DelayReason.Other)
+              .set(DelayDetailsPage, Some("more information"))
 
-        MockSubmitExplainDelayConnector.submit(testErn, submission).returns(Future.successful(Right(successResponseChRIS)))
+            val request = dataRequest(FakeRequest(), userAnswers)
 
-        MockAuditingService.audit(
-          SubmitExplainDelayAudit(
-            "credId",
-            "internalId",
-            "ern",
-            "receipt date",
-            submission,
-            Right(successResponseChRIS)
-          )
-        ).noMoreThanOnce()
+            val submission = SubmitExplainDelayModel(getMovementResponseModel)(userAnswers)
 
-        testService.submit(testErn, testArc)(hc, request).futureValue mustBe successResponseChRIS
-      }
-    }
+            MockSubmitExplainDelayConnector.submit(testErn, submission).returns(Future.successful(Right(successResponseChRIS)))
 
-    "should submit, audit and return a failure response" - {
+            MockAuditingService.audit(
+              SubmitExplainDelayAudit(
+                "credId",
+                "internalId",
+                "ern",
+                "receipt date",
+                submission,
+                Right(successResponseChRIS)
+              )
+            ).noMoreThanOnce()
 
-      "when connector receives a failure from downstream" in {
+            if(nrsEnabled) {
+              MockNRSBrokerService.submitPayload(submission, testErn).returns(Future.successful(Right(nrsBrokerResponseModel)))
+            } else {
+              MockNRSBrokerService.submitPayload(submission, testErn).never()
+            }
 
-        val userAnswers = emptyUserAnswers
-          .set(DelayTypePage, DelayType.ReportOfReceipt)
-          .set(DelayReasonPage, DelayReason.Other)
-          .set(DelayDetailsPage, Some("more information"))
+            testService.submit(testErn, testArc)(hc, request).futureValue mustBe successResponseChRIS
+          }
+        }
 
-        val request = dataRequest(FakeRequest(), userAnswers)
-        val submission = SubmitExplainDelayModel(getMovementResponseModel)(userAnswers)
+        "should submit, audit and return a failure response" - {
 
-        MockSubmitExplainDelayConnector.submit(testErn, submission).returns(Future.successful(Left(UnexpectedDownstreamResponseError)))
+          "when connector receives a failure from downstream" in new Fixture(nrsEnabled) {
 
-        MockAuditingService.audit(
-          SubmitExplainDelayAudit(
-            "credId",
-            "internalId",
-            "ern",
-            "receipt date",
-            submission,
-            Left(UnexpectedDownstreamResponseError)
-          )
-        ).noMoreThanOnce()
+            val userAnswers = emptyUserAnswers
+              .set(DelayTypePage, DelayType.ReportOfReceipt)
+              .set(DelayReasonPage, DelayReason.Other)
+              .set(DelayDetailsPage, Some("more information"))
 
-        intercept[SubmitExplainDelayException](await(testService.submit(testErn, testArc)(hc, request))).getMessage mustBe
-          s"Failed to submit Explain a Delay to emcs-tfe for ern: '$testErn' & arc: '$testArc'"
+            val request = dataRequest(FakeRequest(), userAnswers)
+            val submission = SubmitExplainDelayModel(getMovementResponseModel)(userAnswers)
+
+            MockSubmitExplainDelayConnector.submit(testErn, submission).returns(Future.successful(Left(UnexpectedDownstreamResponseError)))
+
+            MockAuditingService.audit(
+              SubmitExplainDelayAudit(
+                "credId",
+                "internalId",
+                "ern",
+                "receipt date",
+                submission,
+                Left(UnexpectedDownstreamResponseError)
+              )
+            ).noMoreThanOnce()
+
+            if(nrsEnabled) {
+              MockNRSBrokerService.submitPayload(submission, testErn).returns(Future.successful(Right(nrsBrokerResponseModel)))
+            } else {
+              MockNRSBrokerService.submitPayload(submission, testErn).never()
+            }
+
+            intercept[SubmitExplainDelayException](await(testService.submit(testErn, testArc)(hc, request))).getMessage mustBe
+              s"Failed to submit Explain a Delay to emcs-tfe for ern: '$testErn' & arc: '$testArc'"
+          }
+        }
       }
     }
   }
