@@ -50,6 +50,10 @@ class CheckYourAnswersViewSpec extends ViewSpecBase with ViewBehaviours {
           Selectors.p(1) -> messagesForLanguage.p1,
           Selectors.button -> messagesForLanguage.submit
         ))
+
+        "submit button should prevent double click" in {
+          doc.select(Selectors.button).attr("data-prevent-double-click") mustBe "true"
+        }
       }
     }
   }
