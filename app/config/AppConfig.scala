@@ -77,27 +77,11 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, configuration: Configu
 
   def getFeatureSwitchValue(feature: String): Boolean = configuration.get[Boolean](feature)
 
-  def emcsTfeHomeUrl(ern: Option[String]): String = {
-    if (isEnabled(ReturnToLegacy)) {
-      configuration.get[String]("urls.legacy.atAGlance") + ern.fold("")(s"/" + _)
-    } else {
-      configuration.get[String]("urls.emcsTfeHome")
-    }
-  }
+  def emcsTfeHomeUrl: String = configuration.get[String]("urls.emcsTfeHome")
 
-  def emcsMovementDetailsUrl(ern: String, arc: String): String =
-    if (isEnabled(ReturnToLegacy)) {
-      configuration.get[String]("urls.legacy.movementHistory").replace(":ern", ern).replace(":arc", arc)
-    } else {
-      configuration.get[String]("urls.emcsTfeMovementDetails") + s"/$ern/$arc"
-    }
+  def emcsMovementDetailsUrl(ern: String, arc: String): String = configuration.get[String]("urls.emcsTfeMovementDetails") + s"/$ern/$arc"
 
-  def emcsMovementsUrl(ern: String): String =
-    if (isEnabled(ReturnToLegacy)) {
-      configuration.get[String]("urls.legacy.movements").replace(":ern", ern)
-    } else {
-      configuration.get[String]("urls.emcsTfeMovementsIn") + s"/$ern"
-    }
+  def emcsMovementsUrl(ern: String): String = configuration.get[String]("urls.emcsTfeMovementsIn") + s"/$ern"
 
   def betaBannerFeedbackUrl(implicit request: RequestHeader): String =
     s"$contactHost/contact/beta-feedback?service=$deskproName&backUrl=${SafeRedirectUrl(host + request.uri).encodedUrl}"
