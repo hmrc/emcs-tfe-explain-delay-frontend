@@ -31,8 +31,9 @@ object ConfirmationMessages {
     val mayNeedToDoH2: String
     val mayNeedToDoP1: String
     val mayNeedToDoP2: String
-    val atAGlanceLink: String
     val feedback: String
+    val returnToMovementLink: String
+    val returnToAccountHomeLink: String
   }
   object English extends ViewMessages with BaseEnglish {
     val heading: String = "Explanation for delay submitted"
@@ -44,8 +45,9 @@ object ConfirmationMessages {
     val mayNeedToDoH2: String = "What you may need to do"
     val mayNeedToDoP1: String = "This explanation for delay has been submitted to HMRC only. You may also need to notify the consignor or consignee that you have done this."
     val mayNeedToDoP2: String = "If you are the consignee you will still need to submit a report of receipt for this movement."
-    val atAGlanceLink: String = "Return to at a glance"
     val feedback: String = "What did you think of this service? (opens in new tab) (takes 30 seconds)"
+    val returnToMovementLink: String = "Return to movement"
+    val returnToAccountHomeLink: String = "Return to account home"
   }
 
 }

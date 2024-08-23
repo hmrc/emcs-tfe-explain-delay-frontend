@@ -64,8 +64,9 @@ class ConfirmationViewSpec extends ViewSpecBase with ViewBehaviours {
           Selectors.h2(3) -> messagesForLanguage.mayNeedToDoH2,
           Selectors.p(3) -> messagesForLanguage.mayNeedToDoP1,
           Selectors.p(4) -> messagesForLanguage.mayNeedToDoP2,
-          Selectors.button -> messagesForLanguage.atAGlanceLink,
-          Selectors.p(5) -> messagesForLanguage.feedback
+          Selectors.p(5) -> messagesForLanguage.returnToMovementLink,
+          Selectors.p(6) -> messagesForLanguage.returnToAccountHomeLink,
+          Selectors.p(7) -> messagesForLanguage.feedback
         ))
       }
     }
