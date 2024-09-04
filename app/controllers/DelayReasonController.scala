@@ -39,7 +39,6 @@ class DelayReasonController @Inject()(
                                        override val withMovement: MovementAction,
                                        override val getData: DataRetrievalAction,
                                        override val requireData: DataRequiredAction,
-                                       override val userAllowList: UserAllowListAction,
                                        formProvider: DelayReasonFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: DelayReasonView

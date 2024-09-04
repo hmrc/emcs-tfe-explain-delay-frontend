@@ -19,7 +19,7 @@ package models.submitExplainDelay
 import models.response.emcsTfe.GetMovementResponse
 import models.{DelayReason, DelayType, UserAnswers}
 import pages.{DelayDetailsPage, DelayReasonPage, DelayTypePage}
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json.{Json, OFormat}
 import utils.{JsonOptionFormatter, ModelConstructorHelpers}
 
 case class SubmitExplainDelayModel(arc: String,

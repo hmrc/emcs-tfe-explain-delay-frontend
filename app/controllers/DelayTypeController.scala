@@ -37,7 +37,6 @@ class DelayTypeController @Inject()(
                                        override val withMovement: MovementAction,
                                        override val getData: DataRetrievalAction,
                                        override val requireData: DataRequiredAction,
-                                       override val userAllowList: UserAllowListAction,
                                        formProvider: DelayTypeFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: DelayTypeView
