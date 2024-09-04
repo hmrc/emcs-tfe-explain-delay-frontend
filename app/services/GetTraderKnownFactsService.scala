@@ -17,7 +17,7 @@
 package services
 
 import connectors.referenceData.GetTraderKnownFactsConnector
-import models.{TraderKnownFacts, TraderKnownFactsException}
+import models.TraderKnownFacts
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 

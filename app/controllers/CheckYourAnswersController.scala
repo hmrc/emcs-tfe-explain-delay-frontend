@@ -43,7 +43,6 @@ class CheckYourAnswersController @Inject()(
                                             override val withMovement: MovementAction,
                                             override val getData: DataRetrievalAction,
                                             override val requireData: DataRequiredAction,
-                                            override val userAllowList: UserAllowListAction,
                                             val submitExplainDelayService: SubmitExplainDelayService,
                                             val delayDetailsSummary: DelayDetailsSummary,
                                             val controllerComponents: MessagesControllerComponents,

@@ -18,7 +18,6 @@ package fixtures
 
 import models.nrs._
 import models.response.nrsBroker.NRSBrokerInsertPayloadResponse
-import models.submitExplainDelay.SubmitExplainDelayModel
 import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.Organisation
 import uk.gov.hmrc.auth.core.ConfidenceLevel

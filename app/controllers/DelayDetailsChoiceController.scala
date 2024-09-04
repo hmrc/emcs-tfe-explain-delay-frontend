@@ -37,7 +37,6 @@ class DelayDetailsChoiceController @Inject()(
                                        override val withMovement: MovementAction,
                                        override val getData: DataRetrievalAction,
                                        override val requireData: DataRequiredAction,
-                                       override val userAllowList: UserAllowListAction,
                                        formProvider: DelayDetailsChoiceFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: DelayDetailsChoiceView
