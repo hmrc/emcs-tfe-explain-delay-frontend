@@ -26,4 +26,8 @@ $hmrc-assets-path: "/emcs/explain-delay/assets/lib/hmrc-frontend/hmrc/assets/";
   }
 }
 
+.hmrc-header__service-name {
+  width: 80%;
+}
+
 @import "active-trader-info";
