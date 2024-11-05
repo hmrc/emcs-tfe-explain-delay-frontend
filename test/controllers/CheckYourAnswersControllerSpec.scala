@@ -155,7 +155,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
               val result = route(application, postRequest).value
 
               status(result) mustBe INTERNAL_SERVER_ERROR
-              contentAsString(result) mustBe errorHandler.internalServerErrorTemplate(postRequest).toString()
+              contentAsString(result) mustBe await(errorHandler.internalServerErrorTemplate(postRequest)).toString()
             }
           }
 
@@ -171,7 +171,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockUserAnswersServic
                 val result = route(application, postRequest).value
 
                 status(result) mustBe BAD_REQUEST
-                contentAsString(result) mustBe errorHandler.badRequestTemplate(postRequest).toString()
+                contentAsString(result) mustBe await(errorHandler.badRequestTemplate(postRequest)).toString()
               }
             }
           }
