@@ -92,13 +92,14 @@ arc.subHeading = Explanation for delay to {0}
 
 error.browser.title.prefix = Error:
 
-delayType.title = What’s been delayed?
+delayType.title = Tell HMRC about a delay to provide information about a movement
 delayType.heading = Tell HMRC about a delay to provide information about a movement
 delayType.p1 = This explanation for delay will be sent to HMRC only. It will not change the expected delivery time for any goods still in transit.
 delayType.p2 = If you are the consignee, you will still need to submit a report of receipt for this movement.
 delayType.1 = Submitting a report of receipt
 delayType.2 = Providing a consignee or change of destination for the movement
 delayType.checkYourAnswersLabel = What’s been delayed
+delayType.label = What’s been delayed?
 delayType.error.required = Select what’s been delayed
 delayType.change.hidden = what’s been delayed
 
