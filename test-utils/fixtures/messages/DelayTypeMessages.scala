@@ -35,7 +35,7 @@ object DelayTypeMessages {
     val cyaChangeHidden: String
   }
   object English extends ViewMessages with BaseEnglish {
-    override val heading = "What’s been delayed?"
+    override val heading = "Tell HMRC about a delay to provide information about a movement"
     override val title: String = titleHelper(heading)
     override val h1 = "Tell HMRC about a delay to provide information about a movement"
     override val p1 = "This explanation for delay will be sent to HMRC only. It will not change the expected delivery time for any goods still in transit."
