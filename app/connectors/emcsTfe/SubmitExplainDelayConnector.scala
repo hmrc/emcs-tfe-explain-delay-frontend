@@ -21,13 +21,14 @@ import models.response.emcsTfe.SubmitExplainDelayResponse
 import models.submitExplainDelay.SubmitExplainDelayModel
 import models.{ErrorResponse, UnexpectedDownstreamResponseError}
 import play.api.libs.json.Reads
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubmitExplainDelayConnector @Inject()(val http: HttpClient,
+class SubmitExplainDelayConnector @Inject()(val http: HttpClientV2,
                                             config: AppConfig) extends EmcsTfeHttpParser[SubmitExplainDelayResponse] {
 
   override implicit val reads: Reads[SubmitExplainDelayResponse] = SubmitExplainDelayResponse.reads
@@ -36,7 +37,7 @@ class SubmitExplainDelayConnector @Inject()(val http: HttpClient,
 
   def submit(exciseRegistrationNumber: String, submitExplainDelayModel: SubmitExplainDelayModel)
             (implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[ErrorResponse, SubmitExplainDelayResponse]] = {
-    post(s"$baseUrl/explain-delay/$exciseRegistrationNumber/${submitExplainDelayModel.arc}", submitExplainDelayModel)
+    post(url"$baseUrl/explain-delay/$exciseRegistrationNumber/${submitExplainDelayModel.arc}", submitExplainDelayModel)
 
   }.recover {
     ex =>
