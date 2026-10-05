@@ -19,7 +19,7 @@ package models.requests
 import models.{TraderKnownFacts, UserAnswers}
 import models.response.emcsTfe.GetMovementResponse
 import play.api.mvc.WrappedRequest
-import play.twirl.api.Html
+import uk.gov.hmrc.govukfrontend.views.viewmodels.servicenavigation.ServiceNavigationItem
 
 case class DataRequest[A](request: MovementRequest[A],
                           userAnswers: UserAnswers,
@@ -30,6 +30,6 @@ case class DataRequest[A](request: MovementRequest[A],
   val arc: String = request.arc
   val movementDetails: GetMovementResponse = request.movementDetails
 
-  override val navBar: Option[Html] = request.navBar
+  override val navBarItems: Option[Seq[ServiceNavigationItem]] = request.navBarItems
 
 }
